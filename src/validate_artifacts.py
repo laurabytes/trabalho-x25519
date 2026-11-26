@@ -76,7 +76,31 @@ def main():
             f"2Q={item['transpiled_two_qubit_operations']}"
         )
 
-    print("Validação estrutural NumPy + Qiskit/Aer concluída.")
+    # Benchmark PQC: amostras brutas por operação, segredos coincidentes e recursos.
+    benchmark = json.loads((ROOT / "data/benchmark_pqc.json").read_text())
+    x_result = benchmark["x25519"]
+    assert x_result["available"]
+    assert len(x_result["raw_measurements_ms"]["keygen_pair"]) == x_result["repetitions"]
+    assert len(x_result["raw_measurements_ms"]["two_exchanges"]) == x_result["repetitions"]
+    ml_result = benchmark["ml_kem_768"]
+    assert ml_result["available"], ml_result.get("reason", "ML-KEM indisponível")
+    assert ml_result["secret_match"]
+    for operation in ("keygen", "encaps", "decaps"):
+        assert len(ml_result["raw_measurements_ms"][operation]) == ml_result["repetitions"]
+    assert "resource_usage" in benchmark
+    print("Benchmark X25519/ML-KEM: amostras brutas, igualdade de segredos e recursos conferidos.")
+
+    # Cenário quantitativo definido no enunciado: uma chave pública X25519 (32 B)
+    # versus um ciphertext ML-KEM-768 (1.088 B) por estabelecimento.
+    with (ROOT / "data/communication_scenario.csv").open(newline="") as stream:
+        communication = next(csv.DictReader(stream))
+    assert int(communication["sessions"]) == 1_000_000
+    assert int(communication["x25519_bytes"]) == 32_000_000
+    assert int(communication["ml_kem_768_bytes"]) == 1_088_000_000
+    assert int(communication["additional_bytes"]) == 1_056_000_000
+    print("Cenário de comunicação 1 milhão: acréscimo de 1.056.000.000 bytes conferido.")
+
+    print("Validação estrutural completa concluída.")
 
 
 if __name__ == "__main__":
