@@ -66,7 +66,7 @@ def inverse_qft(qc, register):
     qc.append(QFTGate(len(register)).inverse(), register)
 
 
-def build_ecdlog_circuit(case, secret):
+def build_ecdlog_circuit(case, secret, use_ancillas=False):
     p, a, b, P, r = case["p"], case["a"], case["b"], case["P"], case["r"]
     if (4 * a**3 + 27 * b**2) % p == 0:
         raise ValueError("Curva singular.")
@@ -83,9 +83,12 @@ def build_ecdlog_circuit(case, secret):
     u = QuantumRegister(n, "u")
     v = QuantumRegister(n, "v")
     point = QuantumRegister(n, "point")
-    ancillas = AncillaRegister(2 * n - 2, "anc")
+    ancillas = AncillaRegister(2 * n - 2, "anc") if use_ancillas else None
     measured = ClassicalRegister(2 * n, "m")
-    qc = QuantumCircuit(u, v, point, ancillas, measured, name=f"ecdlog_{case['name']}")
+    if use_ancillas:
+        qc = QuantumCircuit(u, v, point, ancillas, measured, name=f"ecdlog_{case['name']}")
+    else:
+        qc = QuantumCircuit(u, v, point, measured, name=f"ecdlog_{case['name']}")
     qc.h(u)
     qc.h(v)
 
@@ -113,7 +116,10 @@ def build_ecdlog_circuit(case, secret):
                 qc.x(qubit)
             for bit in range(n):
                 if (label >> bit) & 1:
-                    qc.mcx(controls, point[bit], ancilla_qubits=list(ancillas), mode='v-chain')
+                    if use_ancillas:
+                        qc.mcx(controls, point[bit], ancilla_qubits=list(ancillas), mode="v-chain")
+                    else:
+                        qc.mcx(controls, point[bit])
             for qubit in reversed(zero_controls):
                 qc.x(qubit)
 
@@ -151,23 +157,37 @@ def decode_counts(counts, n, secret, order):
 
 
 def run_case(case, secret, shots, seed, optimization_level=1):
-    circuit, metadata = build_ecdlog_circuit(case, secret)
+    # Circuito com ancillas limpas para extrair contagem real de CX após
+    # decomposição em base {u, cx}; circuito compacto equivalente para Aer.
+    metric_circuit, metadata = build_ecdlog_circuit(case, secret, use_ancillas=True)
+    simulation_circuit, _ = build_ecdlog_circuit(case, secret, use_ancillas=False)
     backend = AerSimulator()
+
     start = time.perf_counter()
-    compiled = transpile(
-        circuit, basis_gates=["u", "cx"], optimization_level=optimization_level,
+    compiled_metrics = transpile(
+        metric_circuit, basis_gates=["u", "cx"], optimization_level=0,
         seed_transpiler=seed,
     )
     transpile_seconds = time.perf_counter() - start
+
     start = time.perf_counter()
-    result = backend.run(compiled, shots=shots, seed_simulator=seed).result()
+    compiled_simulation = transpile(
+        simulation_circuit, backend=backend, optimization_level=optimization_level,
+        seed_transpiler=seed,
+    )
+    simulation_transpile_seconds = time.perf_counter() - start
+
+    start = time.perf_counter()
+    result = backend.run(
+        compiled_simulation, shots=shots, seed_simulator=seed
+    ).result()
     simulation_seconds = time.perf_counter() - start
-    counts = result.get_counts(compiled)
+    counts = result.get_counts(compiled_simulation)
     n = metadata["phase_qubits_each"]
     recovered, samples, informative, relation, total = decode_counts(
         counts, n, metadata["secret_d"], metadata["order"]
     )
-    ops = compiled.count_ops()
+    ops = compiled_metrics.count_ops()
     two_qubit = int(ops.get("cx", 0))
     metadata.update({
         "shots": shots, "seed": seed, "recovered_d": recovered,
@@ -176,18 +196,20 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         "informative_fraction": informative / total if total else 0.0,
         "period_relation_fraction": relation / total if total else 0.0,
         "measurement_counts": samples,
-        "transpiled_depth": compiled.depth(),
-        "transpiled_qubits": compiled.num_qubits,
-        "transpiled_total_operations": compiled.size(),
+        "transpiled_depth": compiled_metrics.depth(),
+        "transpiled_qubits": compiled_metrics.num_qubits,
+        "transpiled_total_operations": compiled_metrics.size(),
         "transpiled_two_qubit_operations": two_qubit,
-        "native_basis": ["u", "cx"],
         "transpiled_operation_counts": {str(k): int(v) for k, v in ops.items()},
         "transpile_seconds": transpile_seconds,
+        "simulation_transpile_seconds": simulation_transpile_seconds,
         "simulation_seconds": simulation_seconds,
         "backend": "AerSimulator ideal",
         "qiskit_version": qiskit.__version__,
         "qiskit_aer_version": qiskit_aer.__version__,
-        "optimization_level": optimization_level,
+        "optimization_level_simulation": optimization_level,
+        "metrics_basis": ["u", "cx"],
+        "metrics_synthesis": "V-chain with clean ancillas; optimization level 0",
         "oracle": "reversible multi-controlled-X table oracle",
         "limitations": [
             "Instância ECDLP reduzida em curva curta de Weierstrass.",
@@ -197,7 +219,6 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         ],
     })
     return metadata
-
 
 def main():
     parser = argparse.ArgumentParser(description="ECDLP reduzido em circuito Qiskit/Aer.")
