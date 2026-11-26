@@ -162,7 +162,7 @@ def main():
     try:
         import qiskit
         import qiskit_aer
-        qiskit_versions = f"Qiskit: {qiskit.__version__}\\nQiskit Aer: {qiskit_aer.__version__}"
+        qiskit_versions = f"Qiskit: {qiskit.__version__}\nQiskit Aer: {qiskit_aer.__version__}"
     except Exception:
         qiskit_versions = "Qiskit: indisponível"
     x = result.get("x25519", {})
@@ -190,7 +190,7 @@ def main():
         "Tempos incluem overhead de interfaces diferentes e não são comparação intrínseca das primitivas.",
         "RSS é pico agregado, não medição por operação; energia não foi medida.",
     ]
-    Path("data/environment.txt").write_text("\\n".join(environment_lines) + "\\n")
+    Path("data/environment.txt").write_text("\n".join(environment_lines) + "\n")
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 
