@@ -1,131 +1,128 @@
-# avaliação experimental do x25519 e migração pós-quântica
+# Avaliação experimental do X25519 e migração pós-quântica
 
-**disciplina:** computação quântica e defesa  
-**tema:** x25519, ecdlp, shor e ml-kem-768  
-**integrantes:** ______________________________
+**Disciplina:** Computação Quântica e Defesa  
+**Tema:** X25519, ECDLP, algoritmo de Shor e ML-KEM-768  
+**Integrantes:** ______________________________________
 
-## resumo
+## Resumo
 
-Este trabalho analisa X25519, mecanismo de acordo de chaves baseado em Curve25519, por meio de instâncias reduzidas do problema do logaritmo discreto em curvas elípticas (ECDLP). Também apresenta uma simulação ideal da estrutura matemática associada a Shor e compara tamanhos e operações de X25519 e ML-KEM-768. O experimento reduzido não representa a quebra de uma chave real nem a execução de um circuito quântico em hardware.
+Este trabalho analisa a vulnerabilidade teórica do mecanismo de acordo de chaves X25519 ao algoritmo de Shor e avalia ML-KEM-768 como alternativa pós-quântica. A parte experimental implementa instâncias reduzidas de ECDLP em circuito Qiskit, transpila o oráculo reversível para a base de portas {u, cx} e executa a versão compacta no AerSimulator. Foram avaliadas quatro ordens (4, 8, 16 e 32), recuperando d=3 em todas. A maior instância utilizou 15 qubits lógicos, 8 ancillas na síntese, 1.024 shots, profundidade 322.591 e 138.292 portas CX. O benchmark funcional X25519/ML-KEM-768 foi repetido 30 vezes, preservando amostras brutas, medianas e recursos agregados. O modelo é reduzido e não quebra Curve25519 real.
 
-## 1. algoritmo clássico e problema matemático
+## 1. Introdução e problema matemático
 
-X25519 é uma função de acordo de chaves baseada em Curve25519. A segurança clássica do mecanismo está relacionada à dificuldade do problema do logaritmo discreto em curvas elípticas: dados um ponto base (P) e um ponto público (Q=[d]P), encontrar o escalar (d).
+X25519 é um mecanismo de acordo de chaves baseado na curva Curve25519. Duas partes geram valores privados, calculam chaves públicas e combinam o segredo local com a chave pública remota para obter o mesmo segredo compartilhado. O RFC 7748 define entradas e saídas de 32 bytes.
 
-O algoritmo de Shor fornece um algoritmo quântico polinomial para o logaritmo discreto em grupos abelianos. Assim, um computador quântico tolerante a falhas e suficientemente grande ameaça a segurança de mecanismos ECC como X25519. Isso é uma vulnerabilidade matemática teórica, não uma quebra realizada por computadores quânticos atuais.
+A segurança clássica está relacionada ao problema do logaritmo discreto em curvas elípticas (ECDLP): dados um ponto base P e um ponto público Q=[d]P, recuperar o escalar privado d. O algoritmo de Shor resolve o logaritmo discreto em grupos abelianos em tempo polinomial no modelo de computador quântico tolerante a falhas. Isso representa uma ameaça matemática a mecanismos ECC, mas não significa que computadores quânticos atuais consigam quebrar uma chave X25519 real.
 
-## 2. experimento reduzido com a estrutura de shor
+## 2. Experimento reduzido de ECDLP com Shor em Qiskit/Aer
 
-O script `src/ecdlog_shor.py` avalia quatro curvas curtas de Weierstrass sobre corpos finitos pequenos. Para cada instância, define (Q=[3]P), constrói classicamente a função (f(u,v)=[u]P+[v]Q), representa os estados em NumPy e aplica a transformada de Fourier quântica como matriz exata. As amostras são então usadas para recuperar o escalar de teste.
+O experimento principal está implementado em `src/ecdlog_qiskit.py`. O circuito prepara dois registradores de fase em superposição, calcula reversivelmente a função de grupo f(u,v)=[u]P+[v]Q por um oráculo de consulta em tabela, aplica a QFT inversa e mede os registradores. O pós-processamento clássico usa as amostras de Fourier para recuperar o escalar de teste.
 
-| instância | corpo finito | ordem de P | qubits lógicos abstratos | shots | escalar recuperado |
-|---|---:|---:|---:|---:|---:|
-| C4_F5 | 5 | 4 | 6 | 4.096 | 3 |
-| C8_F5 | 5 | 8 | 9 | 4.096 | 3 |
-| C16_F11 | 11 | 16 | 12 | 4.096 | 3 |
-| C32_F23 | 23 | 32 | 15 | 4.096 | 3 |
+O oráculo é reversível e implementado com portas multi-controladas X. Para medir recursos em uma base elementar, uma cópia equivalente usa ancillas limpas na síntese V-chain e é transpilada para {u, cx}. A execução ideal das medições é feita no AerSimulator com a versão compacta equivalente do circuito. A síntese de métricas usa optimization_level=0; a execução no simulador usa optimization_level=1. Ambiente: Qiskit 1.4.6 e Qiskit Aer 0.17.2.
 
-### maior instância
+| Instância | p | Ordem r | P | Q | Qubits lógicos | Qubits transpilados | Profundidade | Operações totais | CX | Shots | d recuperado |
+|---|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|
+| C4_F5 | 5 | 4 | (1,2) | (1,3) | 6 | 8 | 679 | 892 | 298 | 1.024 | 3 |
+| C8_F5 | 5 | 8 | (0,1) | (1,4) | 9 | 13 | 6.733 | 8.742 | 2.898 | 1.024 | 3 |
+| C16_F11 | 11 | 16 | (0,1) | (8,1) | 12 | 18 | 50.199 | 64.992 | 21.540 | 1.024 | 3 |
+| C32_F23 | 23 | 32 | (5,5) | (8,22) | 15 | 23 | 322.591 | 417.102 | 138.292 | 1.024 | 3 |
 
-A maior instância modelada é C32_F23:
+Em todas as quatro instâncias, a fração observada de amostras que satisfaz a relação de período foi 1,0 e o escalar d=3 foi recuperado. A fração informativa (ku coprimo à ordem) variou de 0,4844 a 0,5244. As contagens por par medido estão em `data/ecdlog_qiskit_measurements.csv`; os resultados completos em `data/ecdlog_qiskit_results.json`; e a tabela de métricas em `data/ecdlog_qiskit_metrics.csv`.
 
-- corpo: (mathbb{F}_{23});
-- curva: (y^2=x^3+x+10 pmod{23});
-- ponto base: (P=(5,5));
-- ponto público: (Q=(8,22));
-- ordem de (P): 32;
-- escalar de teste: (d=3);
-- registradores de fase: 5 qubits em cada um;
-- registrador de pontos: 5 qubits na representação abstrata;
-- total: 15 qubits lógicos abstratos;
-- medições configuradas: 4.096;
-- recuperação: o escalar 3 é recuperado pela rotina clássica sobre as amostras.
+### Maior instância
 
-A probabilidade empírica de sucesso do algoritmo completo deve ser entendida como resultado da execução com a semente escolhida, não como uma estimativa universal. A fração informativa teórica do primeiro registrador é (arphi(32)/32=0,5). A fração de amostras que satisfaz a relação de período e a distribuição efetivamente observada ficam registradas em `data/ecdlog_shor_results.json` e `data/ecdlog_shor_measurements.csv`.
+A maior instância resolvida foi C32_F23:
 
-**Profundidade e contagem de portas:** não se aplicam a esta implementação. O código não constrói um circuito de portas e, portanto, não é correto atribuir-lhe profundidade, total de gates ou gates de dois qubits. Também não há ruído, conectividade física, transpilation ou execução em FakeProvider/Aer. Os 15 qubits são uma contagem abstrata dos registradores do modelo, não uma estimativa de recursos de uma implementação física de Shor.
+- Corpo F23; curva y² = x³ + x + 10 (mod 23).
+- P=(5,5), Q=(8,22), ordem de P igual a 32.
+- Escalar conhecido e recuperado: d=3.
+- Dois registradores de fase com 5 qubits cada e registrador de ponto com 5 qubits.
+- 15 qubits lógicos, mais 8 ancillas limpas na síntese V-chain (23 qubits transpilados).
+- 1.024 shots; profundidade 322.591; 417.102 operações totais, incluindo 138.292 CX.
+- Tempo de transpilação para métricas: 1,791 s; tempo de transpilação do circuito compacto para Aer: 0,134 s; simulação: 0,166 s.
 
-### limite experimental
+### Limitações experimentais
 
-A representação de estado cresce rapidamente com o tamanho dos registradores. Além disso, o oráculo é calculado classicamente por tabela de pontos e a QFT é aplicada como matriz densa. Esses fatores tornam o modelo inadequado para extrapolar diretamente recursos de hardware. A simulação demonstra a estrutura matemática em grupos pequenos, não uma implementação quântica completa nem a quebra de Curve25519 real.
+O oráculo usa uma tabela clássica de pontos e não implementa aritmética reversível escalável de curvas elípticas. A execução é ideal no AerSimulator: não modela ruído, conectividade/calibração de um backend físico nem execução em QPU. Assim, as métricas são da síntese do oráculo reduzido para {u, cx}, não uma estimativa de recursos para quebrar Curve25519 real. A simulação NumPy independente foi mantida como referência matemática em `src/ecdlog_shor.py`.
 
-## 3. alternativa pós-quântica
+A fatoração anterior de N=77, com a=30, valida parte do fluxo de Shor, mas não é um ataque ao X25519 e não é contabilizada como resultado ECDLP neste trabalho.
 
-ML-KEM-768 foi escolhido por manter a função de estabelecimento de segredo compartilhado por encapsulamento. Seu fluxo é:
+## 3. Alternativa pós-quântica: ML-KEM-768
+
+ML-KEM-768 é um mecanismo de encapsulamento de chaves baseado em reticulados, padronizado pelo NIST no FIPS 203. Seu fluxo é:
 
 1. **KeyGen:** gera a chave pública e a chave de desencapsulamento.
-2. **Encaps:** usa a chave pública para produzir ciphertext e segredo compartilhado.
+2. **Encaps:** usa a chave pública para produzir um ciphertext e um segredo compartilhado.
 3. **Decaps:** usa a chave privada e o ciphertext para recuperar o mesmo segredo.
 
-ML-KEM é um mecanismo de encapsulamento de chaves (KEM), não um algoritmo de assinatura digital. A migração de X25519 para ML-KEM não substitui, por si só, os mecanismos de autenticação e assinatura do protocolo.
+ML-KEM é um KEM, não um algoritmo de assinatura digital. A migração de X25519 para ML-KEM não substitui, por si só, os mecanismos de autenticação e assinatura do protocolo.
 
-## 4. comparação de tamanhos e comunicação
+## 4. Comparação quantitativa de tamanhos e comunicação
 
-A tabela usa os tamanhos dos elementos criptográficos padronizados, não o tamanho de arquivos PEM exportados pelo OpenSSL.
+A tabela utiliza tamanhos normativos dos elementos criptográficos, não arquivos PEM exportados pelo OpenSSL.
 
-| métrica | X25519 | ML-KEM-768 | diferença |
+| Métrica | X25519 | ML-KEM-768 | Diferença |
 |---|---:|---:|---:|
-| chave pública | 32 B | 1.184 B | +1.152 B (+3.600%) |
-| chave privada em formato bruto | 32 B | 2.400 B | +2.368 B (+7.400%) |
-| mensagem considerada | 64 B (duas shares públicas) | 1.088 B (ciphertext) | +1.024 B (+1.600%) |
-| segredo compartilhado | 32 B | 32 B | 0 B (0%) |
+| Chave pública | 32 B | 1.184 B | +1.152 B (+3.600%) |
+| Chave privada em formato bruto | 32 B | 2.400 B | +2.368 B (+7.400%) |
+| Mensagem considerada no estabelecimento | 32 B (chave pública) | 1.088 B (ciphertext) | +1.056 B (+3.300%) |
+| Segredo compartilhado | 32 B | 32 B | 0 B |
 
-### cenário quantitativo
+Seguindo o enunciado, considera-se uma chave pública X25519 de 32 B ou um ciphertext ML-KEM-768 de 1.088 B por estabelecimento. Em 1.000.000 de estabelecimentos, os volumes são 32.000.000 B e 1.088.000.000 B, respectivamente, com acréscimo de 1.056.000.000 B (1,056 GB decimais).
 
-Considerando 1.000.000 de sessões, duas shares públicas X25519 por sessão totalizam 64.000.000 B. No cenário ML-KEM-768, considera-se um ciphertext por sessão e uma chave pública provisionada uma única vez: 1.088.001.184 B. O acréscimo calculado é 1.024.001.184 B.
+O cenário considera somente esses elementos; não inclui cabeçalhos, certificados, retransmissões ou outras mensagens do protocolo. Os valores reproduzíveis estão em `data/communication_scenario.csv`.
 
-Esse cenário é ilustrativo e considera apenas os elementos indicados. Não inclui cabeçalhos, certificados, retransmissões, armazenamento de chaves privadas, rotação ou outras mensagens do protocolo. Os dados estão em `data/communication_scenario.csv`.
+## 5. Processamento, recursos e reprodutibilidade
 
-## 5. processamento e reprodutibilidade
+O script `src/benchmark_pqc.py` mede 30 repetições e preserva os tempos brutos no JSON, além das medianas. ML-KEM-768 registra KeyGen, Encaps e Decaps separadamente; em todas as repetições, os segredos de encapsulamento e desencapsulamento coincidiram. X25519 registra a geração de um par de chaves e duas operações de exchange.
 
-O script `src/benchmark_pqc.py` mede geração de chaves e operações de acordo/encapsulamento em repetições configuráveis. Ele também verifica a igualdade entre os segredos derivados pelos dois lados. O arquivo `data/benchmark_pqc.json` registra ambiente, versões, número de repetições, tamanhos observados e medianas.
+| Operação | Mediana (ms) |
+|---|---:|
+| X25519 KeyGen de um par | 0,063249 |
+| X25519 duas operações exchange | 0,063679 |
+| ML-KEM-768 KeyGen + exportação da chave pública | 6,968748 |
+| ML-KEM-768 Encaps | 3,388151 |
+| ML-KEM-768 Decaps | 3,072942 |
 
-**Atenção à comparação:** X25519 é medido pela biblioteca Python `cryptography`, enquanto ML-KEM-768 é medido pela interface de linha de comando do OpenSSL. Os tempos incluem overhead de interfaces, processos e arquivos, portanto não isolam o custo das primitivas e não devem ser comparados como benchmark justo de implementação. Os tamanhos PEM também não devem ser confundidos com os tamanhos normativos da seção 4. CPU, memória e energia não são medidos neste experimento.
+**Ressalva metodológica:** X25519 é medido pela biblioteca Python `cryptography`, enquanto ML-KEM-768 é medido pela interface de linha de comando do OpenSSL. Os tempos incluem overheads diferentes de interfaces, processos e arquivos, portanto não isolam o custo intrínseco das primitivas. Os tamanhos PEM observados pelo OpenSSL também não devem ser confundidos com os tamanhos normativos da seção 4.
 
-Para obter uma medição atualizada no ambiente de avaliação, execute:
+O benchmark registra CPU e pico de memória agregados do processo e dos subprocessos OpenSSL. Nesta execução, o pico de RSS do processo foi 28.164 KiB; o consumo de CPU foi 0,070544 s de usuário e 0,016358 s de sistema no processo principal. Esses valores não são medidos por operação. Energia não foi medida. O resumo do ambiente está em `data/environment.txt`, e as amostras brutas em `data/benchmark_pqc.json`.
 
-```bash
-python src/benchmark_pqc.py --repetitions 30
-```
-
-Se OpenSSL não oferecer ML-KEM-768, o script registra a indisponibilidade em vez de simular um resultado.
-
-## 6. impacto e estratégia de migração
+## 6. Impactos e estratégia de migração
 
 A migração exige mais do que trocar uma primitiva. É necessário atualizar bibliotecas e versões de protocolos, negociar suporte ao KEM, adaptar formatos e tamanhos de chaves e ciphertexts, revisar buffers e limites de mensagens/MTU, atualizar armazenamento e rotação de chaves e testar interoperabilidade. Em dispositivos IoT, devem ser medidos consumo de memória, CPU, energia e latência no hardware-alvo.
 
 Uma implantação gradual pode considerar um modo híbrido, desde que utilize uma composição e um protocolo especificados e analisados. A troca de X25519 por ML-KEM não elimina a necessidade de autenticação e de assinaturas digitais resistentes a ataques quânticos quando aplicável.
 
-## 7. respostas ao enunciado
+## 7. Respostas ao enunciado
 
 **Q1. Qual foi a maior instância comprometida experimentalmente?**  
-A maior instância modelada foi C32_F23, com corpo (mathbb{F}_{23}), curva (y^2=x^3+x+10), (P=(5,5)), (Q=(8,22)), ordem 32 e escalar de teste (d=3). A rotina recupera o escalar nas amostras simuladas. O modelo usa 15 qubits lógicos abstratos e 4.096 shots. Não há profundidade ou contagem de gates porque não foi construído um circuito de portas.
+C32_F23: corpo F23, curva y²=x³+x+10 (mod 23), P=(5,5), Q=(8,22), ordem 32 e d=3 recuperado. O circuito usa 15 qubits lógicos e 8 ancillas limpas na síntese V-chain (23 qubits transpilados), com 1.024 shots, profundidade 322.591, 417.102 operações e 138.292 CX.
 
 **Q2. Qual foi o principal fator limitante?**  
-O crescimento da representação de estado e o custo de calcular o oráculo por tabela e aplicar a QFT densa. O experimento não mediu recursos de circuito transpilado.
+O custo de sintetizar o oráculo reversível por tabela em portas elementares: a instância de ordem 32 chega a 138.292 CX e profundidade 322.591. O modelo não implementa aritmética de curva escalável e não inclui ruído nem conectividade de hardware físico.
 
-**Q3. Por que X25519 é vulnerável mesmo sem quebrar uma chave real?**  
-Porque sua segurança está relacionada ao ECDLP, para o qual Shor oferece um algoritmo quântico eficiente em um computador tolerante a falhas e suficientemente grande. A instância reduzida ilustra a estrutura matemática, não os recursos necessários para atacar Curve25519.
+**Q3. Por que X25519 é vulnerável a computadores quânticos suficientemente grandes?**  
+Porque sua segurança está relacionada à dificuldade do ECDLP, para o qual Shor oferece um algoritmo quântico eficiente em um computador tolerante a falhas e suficientemente grande. A instância reduzida ilustra a estrutura matemática, não os recursos necessários para atacar Curve25519.
 
 **Q4. Qual alternativa PQC é adequada?**  
-ML-KEM-768, padronizado para encapsulamento de chaves, mantém a função de estabelecer um segredo compartilhado. A autenticação e as assinaturas precisam ser tratadas separadamente.
+ML-KEM-768, padronizado no NIST FIPS 203, mantém a função de estabelecimento de segredo compartilhado por encapsulamento. A autenticação e as assinaturas precisam ser tratadas separadamente.
 
 **Q5. Qual é o custo quantitativo?**  
-A chave pública passa de 32 B para 1.184 B; a chave privada bruta considerada, de 32 B para 2.400 B; a mensagem de troca considerada, de 64 B para 1.088 B. No cenário de um milhão de sessões, o volume modelado aumenta em 1.024.001.184 B. O processamento é registrado no JSON do benchmark, com a ressalva de que as interfaces são diferentes; CPU, memória e energia não foram medidos.
+A chave pública passa de 32 B para 1.184 B; a chave privada bruta, de 32 B para 2.400 B; e a mensagem considerada, de 32 B para 1.088 B. Em um milhão de estabelecimentos, o acréscimo de comunicação é 1.056.000.000 B. Os tempos medianos de KeyGen, Encaps e Decaps estão na seção 5. CPU e pico de memória são registrados de forma agregada; energia não foi medida.
 
-**Q6. Quais alterações são necessárias?**  
-Atualizar bibliotecas, protocolos e negociação de algoritmos; adaptar formatos, buffers, armazenamento, rotação e limites de mensagens; e validar interoperabilidade e compatibilidade nos dispositivos.
+**Q6. Quais alterações seriam necessárias em um sistema real?**  
+Atualizar bibliotecas, protocolos e negociação de algoritmos; adaptar formatos, buffers, armazenamento, rotação e limites de mensagens; planejar provisionamento e distribuição de chaves; e validar interoperabilidade e compatibilidade nos dispositivos.
 
 **Q7. Basta substituir o algoritmo?**  
-Não. A migração exige mudanças de protocolo e arquitetura, planejamento de provisionamento e armazenamento, tratamento de mensagens maiores, compatibilidade entre versões e avaliação de recursos dos dispositivos.
+Não. A migração exige mudanças de protocolo e arquitetura, planejamento de provisionamento e armazenamento, tratamento de mensagens maiores, compatibilidade entre versões e avaliação de recursos dos dispositivos. Em alguns sistemas, pode ser necessária uma etapa híbrida durante a transição.
 
-## conclusão
+## Conclusão
 
-A simulação em quatro grupos pequenos recupera o escalar de teste e ilustra a relação matemática explorada por Shor. Como usa NumPy, oráculo clássico por tabela e QFT matricial, não fornece métricas de circuito quântico nem demonstra ataque a Curve25519. A comparação com ML-KEM-768 evidencia aumento de tamanhos e necessidades de adaptação de protocolo e arquitetura. A avaliação de processamento deve ser interpretada com cautela devido às interfaces diferentes e precisa ser reproduzida no ambiente de entrega.
+O circuito Qiskit/Aer recuperou d=3 nas quatro instâncias reduzidas de ECDLP, até a ordem 32. A síntese para a base {u, cx} permitiu medir profundidade, operações totais e portas CX. O experimento continua limitado por um oráculo de tabela clássica e por simulação ideal, não representando ataque a Curve25519 real. A comparação mostra aumento dos elementos de comunicação e armazenamento ao migrar para ML-KEM-768; os benchmarks funcionais, tempos brutos, CPU e pico de memória foram registrados com as ressalvas metodológicas descritas.
 
-## referências
+## Referências
 
 1. IETF. **RFC 7748 — Elliptic Curves for Security**. 2016. https://www.rfc-editor.org/rfc/rfc7748
 2. NIST. **FIPS 203 — Module-Lattice-Based Key-Encapsulation Mechanism Standard**. 2024. https://doi.org/10.6028/NIST.FIPS.203
-3. Shor, P. W. **Algorithms for quantum computation: discrete logarithms and factoring**. 1994.
-4. Material da disciplina. **Exercício — Avaliação Experimental de Algoritmos Criptográficos frente ao Algoritmo de Shor e Migração Pós-Quântica**. 2026.
+3. Material da disciplina. **Avaliação Experimental de Algoritmos Criptográficos frente ao Algoritmo de Shor e Migração Pós-Quântica**. 2026.
