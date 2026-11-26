@@ -41,6 +41,12 @@ with (data_dir / "communication_scenario.csv").open("w", newline="") as file:
     writer.writerow(["sessions", "x25519_bytes", "ml_kem_768_bytes", "additional_bytes"])
     writer.writerow([sessions, x25519_bytes, ml_kem_bytes, ml_kem_bytes - x25519_bytes])
 
+with (data_dir / "storage_scenario.csv").open("w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(["keys", "element", "x25519_bytes", "ml_kem_768_bytes", "additional_bytes"])
+    writer.writerow([sessions, "public_keys", 32 * sessions, 1184 * sessions, (1184 - 32) * sessions])
+    writer.writerow([sessions, "private_keys_raw", 32 * sessions, 2400 * sessions, (2400 - 32) * sessions])
+
 plt.figure(figsize=(8, 5))
 plt.bar(
     ["X25519: public key", "ML-KEM-768: ciphertext"],
@@ -93,7 +99,8 @@ if qiskit_results_path.exists():
         "name", "order", "secret_d", "recovered_d", "success", "shots",
         "logical_qubits", "transpiled_qubits", "transpiled_depth", "transpiled_total_operations",
         "transpiled_two_qubit_operations", "transpile_seconds", "simulation_transpile_seconds", "simulation_seconds",
-        "informative_fraction", "period_relation_fraction",
+        "informative_fraction", "probability_correct_single_shot", "period_relation_fraction",
+        "circuit_build_seconds", "simulation_transpile_seconds", "total_experiment_seconds",
     ]
     with metrics_path.open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=metric_fields)
@@ -103,9 +110,11 @@ if qiskit_results_path.exists():
 
     case_labels = [item["name"] for item in qresults]
     for field, ylabel, title, filename in [
+        ("transpiled_qubits", "Qubits transpilados", "Qubits após síntese do circuito ECDLP", "ecdlog_qiskit_qubits.svg"),
         ("transpiled_depth", "Profundidade", "Profundidade do circuito ECDLP transpilado", "ecdlog_qiskit_depth.svg"),
         ("transpiled_total_operations", "Operações", "Operações totais do circuito ECDLP", "ecdlog_qiskit_operations.svg"),
-        ("transpiled_two_qubit_operations", "Portas de dois qubits", "Operações de dois qubits do circuito ECDLP", "ecdlog_qiskit_2q.svg"),
+        ("transpiled_two_qubit_operations", "Portas CX", "Portas CX do circuito ECDLP", "ecdlog_qiskit_2q.svg"),
+        ("total_experiment_seconds", "Tempo (s)", "Tempo total por instância ECDLP", "ecdlog_qiskit_runtime.svg"),
     ]:
         plt.figure(figsize=(8, 5))
         plt.bar(case_labels, [item[field] for item in qresults])
