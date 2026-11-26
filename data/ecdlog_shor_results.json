@@ -1,6 +1,462 @@
 [
- {"name":"C4_F5","curve":{"p":5,"a":1,"b":2},"P":[1,2],"Q":[1,3],"order":4,"secret_d":3,"recovered_d":3,"success":true,"phase_qubits_each":2,"point_qubits":2,"logical_qubits":6,"shots":4096,"seed":20261110,"informative_shots":2039,"informative_fraction":0.497802734375,"theoretical_informative_fraction":0.5,"period_relation_fraction":1.0,"simulation_seconds":0.000663087,"method":"ideal_numpy_statevector_and_exact_qft"},
- {"name":"C8_F5","curve":{"p":5,"a":4,"b":1},"P":[0,1],"Q":[1,4],"order":8,"secret_d":3,"recovered_d":3,"success":true,"phase_qubits_each":3,"point_qubits":3,"logical_qubits":9,"shots":4096,"seed":20261111,"informative_shots":2021,"informative_fraction":0.493408203125,"theoretical_informative_fraction":0.5,"period_relation_fraction":1.0,"simulation_seconds":0.000526334,"method":"ideal_numpy_statevector_and_exact_qft"},
- {"name":"C16_F11","curve":{"p":11,"a":2,"b":1},"P":[0,1],"Q":[8,1],"order":16,"secret_d":3,"recovered_d":3,"success":true,"phase_qubits_each":4,"point_qubits":4,"logical_qubits":12,"shots":4096,"seed":20261112,"informative_shots":2037,"informative_fraction":0.497314453125,"theoretical_informative_fraction":0.5,"period_relation_fraction":1.0,"simulation_seconds":0.000907931,"method":"ideal_numpy_statevector_and_exact_qft"},
- {"name":"C32_F23","curve":{"p":23,"a":1,"b":10},"P":[5,5],"Q":[8,22],"order":32,"secret_d":3,"recovered_d":3,"success":true,"phase_qubits_each":5,"point_qubits":5,"logical_qubits":15,"shots":4096,"seed":20261113,"informative_shots":1983,"informative_fraction":0.484130859375,"theoretical_informative_fraction":0.5,"period_relation_fraction":1.0,"simulation_seconds":0.008312295,"method":"ideal_numpy_statevector_and_exact_qft"}
+  {
+    "name": "C4_F5",
+    "curve": {
+      "p": 5,
+      "a": 1,
+      "b": 2
+    },
+    "P": [
+      1,
+      2
+    ],
+    "Q": [
+      1,
+      3
+    ],
+    "order": 4,
+    "secret_d": 3,
+    "recovered_d": 3,
+    "success": true,
+    "phase_qubits_each": 2,
+    "point_qubits": 2,
+    "logical_qubits": 6,
+    "shots": 4096,
+    "seed": 20261110,
+    "informative_shots": 2039,
+    "informative_fraction": 0.497802734375,
+    "theoretical_informative_fraction": 0.5,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 1065
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 1052
+      },
+      {
+        "ku": 2,
+        "kv": 2,
+        "count": 992
+      },
+      {
+        "ku": 3,
+        "kv": 1,
+        "count": 987
+      }
+    ],
+    "simulation_seconds": 0.021492375999997648,
+    "method": "ideal_numpy_statevector_and_exact_qft",
+    "limitations": [
+      "Não é circuito nativo transpilado em Qiskit/Aer.",
+      "O oráculo é uma tabela de valores da curva em instância pequena.",
+      "A QFT é aplicada como matriz unitária exata.",
+      "Não modela ruído, conectividade ou hardware quântico.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  },
+  {
+    "name": "C8_F5",
+    "curve": {
+      "p": 5,
+      "a": 4,
+      "b": 1
+    },
+    "P": [
+      0,
+      1
+    ],
+    "Q": [
+      1,
+      4
+    ],
+    "order": 8,
+    "secret_d": 3,
+    "recovered_d": 3,
+    "success": true,
+    "phase_qubits_each": 3,
+    "point_qubits": 3,
+    "logical_qubits": 9,
+    "shots": 4096,
+    "seed": 20261111,
+    "informative_shots": 2021,
+    "informative_fraction": 0.493408203125,
+    "theoretical_informative_fraction": 0.5,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 500
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 517
+      },
+      {
+        "ku": 2,
+        "kv": 6,
+        "count": 534
+      },
+      {
+        "ku": 3,
+        "kv": 1,
+        "count": 503
+      },
+      {
+        "ku": 4,
+        "kv": 4,
+        "count": 511
+      },
+      {
+        "ku": 5,
+        "kv": 7,
+        "count": 474
+      },
+      {
+        "ku": 6,
+        "kv": 2,
+        "count": 530
+      },
+      {
+        "ku": 7,
+        "kv": 5,
+        "count": 527
+      }
+    ],
+    "simulation_seconds": 0.0004837250000093718,
+    "method": "ideal_numpy_statevector_and_exact_qft",
+    "limitations": [
+      "Não é circuito nativo transpilado em Qiskit/Aer.",
+      "O oráculo é uma tabela de valores da curva em instância pequena.",
+      "A QFT é aplicada como matriz unitária exata.",
+      "Não modela ruído, conectividade ou hardware quântico.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  },
+  {
+    "name": "C16_F11",
+    "curve": {
+      "p": 11,
+      "a": 2,
+      "b": 1
+    },
+    "P": [
+      0,
+      1
+    ],
+    "Q": [
+      8,
+      1
+    ],
+    "order": 16,
+    "secret_d": 3,
+    "recovered_d": 3,
+    "success": true,
+    "phase_qubits_each": 4,
+    "point_qubits": 4,
+    "logical_qubits": 12,
+    "shots": 4096,
+    "seed": 20261112,
+    "informative_shots": 2037,
+    "informative_fraction": 0.497314453125,
+    "theoretical_informative_fraction": 0.5,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 275
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 275
+      },
+      {
+        "ku": 2,
+        "kv": 6,
+        "count": 243
+      },
+      {
+        "ku": 3,
+        "kv": 9,
+        "count": 256
+      },
+      {
+        "ku": 4,
+        "kv": 12,
+        "count": 240
+      },
+      {
+        "ku": 5,
+        "kv": 15,
+        "count": 275
+      },
+      {
+        "ku": 6,
+        "kv": 2,
+        "count": 265
+      },
+      {
+        "ku": 7,
+        "kv": 5,
+        "count": 220
+      },
+      {
+        "ku": 8,
+        "kv": 8,
+        "count": 245
+      },
+      {
+        "ku": 9,
+        "kv": 11,
+        "count": 247
+      },
+      {
+        "ku": 10,
+        "kv": 14,
+        "count": 286
+      },
+      {
+        "ku": 11,
+        "kv": 1,
+        "count": 276
+      },
+      {
+        "ku": 12,
+        "kv": 4,
+        "count": 254
+      },
+      {
+        "ku": 13,
+        "kv": 7,
+        "count": 255
+      },
+      {
+        "ku": 14,
+        "kv": 10,
+        "count": 251
+      },
+      {
+        "ku": 15,
+        "kv": 13,
+        "count": 233
+      }
+    ],
+    "simulation_seconds": 0.0010821529999986979,
+    "method": "ideal_numpy_statevector_and_exact_qft",
+    "limitations": [
+      "Não é circuito nativo transpilado em Qiskit/Aer.",
+      "O oráculo é uma tabela de valores da curva em instância pequena.",
+      "A QFT é aplicada como matriz unitária exata.",
+      "Não modela ruído, conectividade ou hardware quântico.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  },
+  {
+    "name": "C32_F23",
+    "curve": {
+      "p": 23,
+      "a": 1,
+      "b": 10
+    },
+    "P": [
+      5,
+      5
+    ],
+    "Q": [
+      8,
+      22
+    ],
+    "order": 32,
+    "secret_d": 3,
+    "recovered_d": 3,
+    "success": true,
+    "phase_qubits_each": 5,
+    "point_qubits": 5,
+    "logical_qubits": 15,
+    "shots": 4096,
+    "seed": 20261113,
+    "informative_shots": 1983,
+    "informative_fraction": 0.484130859375,
+    "theoretical_informative_fraction": 0.5,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 118
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 121
+      },
+      {
+        "ku": 2,
+        "kv": 6,
+        "count": 123
+      },
+      {
+        "ku": 3,
+        "kv": 9,
+        "count": 128
+      },
+      {
+        "ku": 4,
+        "kv": 12,
+        "count": 133
+      },
+      {
+        "ku": 5,
+        "kv": 15,
+        "count": 130
+      },
+      {
+        "ku": 6,
+        "kv": 18,
+        "count": 129
+      },
+      {
+        "ku": 7,
+        "kv": 21,
+        "count": 116
+      },
+      {
+        "ku": 8,
+        "kv": 24,
+        "count": 147
+      },
+      {
+        "ku": 9,
+        "kv": 27,
+        "count": 131
+      },
+      {
+        "ku": 10,
+        "kv": 30,
+        "count": 109
+      },
+      {
+        "ku": 11,
+        "kv": 1,
+        "count": 104
+      },
+      {
+        "ku": 12,
+        "kv": 4,
+        "count": 133
+      },
+      {
+        "ku": 13,
+        "kv": 7,
+        "count": 122
+      },
+      {
+        "ku": 14,
+        "kv": 10,
+        "count": 137
+      },
+      {
+        "ku": 15,
+        "kv": 13,
+        "count": 136
+      },
+      {
+        "ku": 16,
+        "kv": 16,
+        "count": 139
+      },
+      {
+        "ku": 17,
+        "kv": 19,
+        "count": 140
+      },
+      {
+        "ku": 18,
+        "kv": 22,
+        "count": 150
+      },
+      {
+        "ku": 19,
+        "kv": 25,
+        "count": 140
+      },
+      {
+        "ku": 20,
+        "kv": 28,
+        "count": 106
+      },
+      {
+        "ku": 21,
+        "kv": 31,
+        "count": 112
+      },
+      {
+        "ku": 22,
+        "kv": 2,
+        "count": 139
+      },
+      {
+        "ku": 23,
+        "kv": 5,
+        "count": 108
+      },
+      {
+        "ku": 24,
+        "kv": 8,
+        "count": 139
+      },
+      {
+        "ku": 25,
+        "kv": 11,
+        "count": 124
+      },
+      {
+        "ku": 26,
+        "kv": 14,
+        "count": 156
+      },
+      {
+        "ku": 27,
+        "kv": 17,
+        "count": 122
+      },
+      {
+        "ku": 28,
+        "kv": 20,
+        "count": 122
+      },
+      {
+        "ku": 29,
+        "kv": 23,
+        "count": 111
+      },
+      {
+        "ku": 30,
+        "kv": 26,
+        "count": 133
+      },
+      {
+        "ku": 31,
+        "kv": 29,
+        "count": 138
+      }
+    ],
+    "simulation_seconds": 0.005370130999978073,
+    "method": "ideal_numpy_statevector_and_exact_qft",
+    "limitations": [
+      "Não é circuito nativo transpilado em Qiskit/Aer.",
+      "O oráculo é uma tabela de valores da curva em instância pequena.",
+      "A QFT é aplicada como matriz unitária exata.",
+      "Não modela ruído, conectividade ou hardware quântico.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  }
 ]

@@ -1,0 +1,5 @@
+name,order,secret_d,recovered_d,success,shots,logical_qubits,transpiled_depth,transpiled_total_operations,transpiled_two_qubit_operations,transpile_seconds,simulation_seconds,informative_fraction,period_relation_fraction
+C4_F5,4,3,3,True,1024,6,34,53,4,0.05811569499999791,0.0025598699999989094,0.484375,1.0
+C8_F5,8,3,3,True,1024,9,159,227,8,0.041182595000009314,0.005147700999998506,0.4951171875,1.0
+C16_F11,16,3,3,True,1024,12,761,1023,16,0.05147944000000848,0.019012656000001016,0.5,1.0
+C32_F23,32,3,3,True,1024,15,3563,4587,24,0.10191509300000234,0.14527580499998294,0.5244140625,1.0

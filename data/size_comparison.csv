@@ -1,5 +1,5 @@
 metric,classic_item,classic_bytes,pqc_item,pqc_bytes,difference_bytes,increase_percent
-Public key,X25519,32,ML-KEM-768,1184,1152,3600.0
-Private key,X25519 raw scalar,32,ML-KEM-768 decapsulation key,2400,2368,7400.0
-Encapsulation/message,X25519 two public shares,64,ML-KEM-768 ciphertext,1088,1024,1600.0
-Shared secret,X25519,32,ML-KEM-768,32,0,0.0
+Chave pública,X25519,32,ML-KEM-768,1184,1152,3600.0
+Chave privada,X25519 (escalar bruto),32,ML-KEM-768 (decapsulation key),2400,2368,7400.0
+Mensagem de estabelecimento,X25519 (chave pública),32,ML-KEM-768 (ciphertext),1088,1056,3300.0
+Segredo compartilhado,X25519,32,ML-KEM-768,32,0,0.0

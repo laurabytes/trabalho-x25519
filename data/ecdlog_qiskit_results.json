@@ -1,0 +1,526 @@
+[
+  {
+    "name": "C4_F5",
+    "curve": {
+      "p": 5,
+      "a": 1,
+      "b": 2
+    },
+    "P": [
+      1,
+      2
+    ],
+    "Q": [
+      1,
+      3
+    ],
+    "order": 4,
+    "secret_d": 3,
+    "phase_qubits_each": 2,
+    "point_qubits": 2,
+    "logical_qubits": 6,
+    "shots": 1024,
+    "seed": 20261126,
+    "recovered_d": 3,
+    "success": true,
+    "informative_shots": 496,
+    "informative_fraction": 0.484375,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 3,
+        "kv": 1,
+        "count": 260
+      },
+      {
+        "ku": 2,
+        "kv": 2,
+        "count": 250
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 236
+      },
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 278
+      }
+    ],
+    "transpiled_depth": 34,
+    "transpiled_qubits": 6,
+    "transpiled_total_operations": 53,
+    "transpiled_two_qubit_operations": 4,
+    "transpiled_operation_counts": {
+      "x": 21,
+      "mcx": 16,
+      "h": 5,
+      "measure": 4,
+      "u2": 3,
+      "swap": 2,
+      "cp": 2
+    },
+    "transpile_seconds": 0.05811569499999791,
+    "simulation_seconds": 0.0025598699999989094,
+    "backend": "AerSimulator ideal",
+    "qiskit_version": "1.4.6",
+    "qiskit_aer_version": "0.17.2",
+    "optimization_level": 1,
+    "oracle": "reversible multi-controlled-X table oracle",
+    "limitations": [
+      "Instância ECDLP reduzida em curva curta de Weierstrass.",
+      "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
+      "AerSimulator ideal: sem ruído físico ou execução em QPU.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  },
+  {
+    "name": "C8_F5",
+    "curve": {
+      "p": 5,
+      "a": 4,
+      "b": 1
+    },
+    "P": [
+      0,
+      1
+    ],
+    "Q": [
+      1,
+      4
+    ],
+    "order": 8,
+    "secret_d": 3,
+    "phase_qubits_each": 3,
+    "point_qubits": 3,
+    "logical_qubits": 9,
+    "shots": 1024,
+    "seed": 20261127,
+    "recovered_d": 3,
+    "success": true,
+    "informative_shots": 507,
+    "informative_fraction": 0.4951171875,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 3,
+        "kv": 1,
+        "count": 104
+      },
+      {
+        "ku": 7,
+        "kv": 5,
+        "count": 123
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 145
+      },
+      {
+        "ku": 6,
+        "kv": 2,
+        "count": 128
+      },
+      {
+        "ku": 4,
+        "kv": 4,
+        "count": 146
+      },
+      {
+        "ku": 5,
+        "kv": 7,
+        "count": 135
+      },
+      {
+        "ku": 2,
+        "kv": 6,
+        "count": 128
+      },
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 115
+      }
+    ],
+    "transpiled_depth": 159,
+    "transpiled_qubits": 9,
+    "transpiled_total_operations": 227,
+    "transpiled_two_qubit_operations": 8,
+    "transpiled_operation_counts": {
+      "x": 105,
+      "mcx": 96,
+      "h": 7,
+      "cp": 6,
+      "measure": 6,
+      "u2": 5,
+      "swap": 2
+    },
+    "transpile_seconds": 0.041182595000009314,
+    "simulation_seconds": 0.005147700999998506,
+    "backend": "AerSimulator ideal",
+    "qiskit_version": "1.4.6",
+    "qiskit_aer_version": "0.17.2",
+    "optimization_level": 1,
+    "oracle": "reversible multi-controlled-X table oracle",
+    "limitations": [
+      "Instância ECDLP reduzida em curva curta de Weierstrass.",
+      "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
+      "AerSimulator ideal: sem ruído físico ou execução em QPU.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  },
+  {
+    "name": "C16_F11",
+    "curve": {
+      "p": 11,
+      "a": 2,
+      "b": 1
+    },
+    "P": [
+      0,
+      1
+    ],
+    "Q": [
+      8,
+      1
+    ],
+    "order": 16,
+    "secret_d": 3,
+    "phase_qubits_each": 4,
+    "point_qubits": 4,
+    "logical_qubits": 12,
+    "shots": 1024,
+    "seed": 20261128,
+    "recovered_d": 3,
+    "success": true,
+    "informative_shots": 512,
+    "informative_fraction": 0.5,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 12,
+        "kv": 4,
+        "count": 66
+      },
+      {
+        "ku": 11,
+        "kv": 1,
+        "count": 63
+      },
+      {
+        "ku": 4,
+        "kv": 12,
+        "count": 53
+      },
+      {
+        "ku": 13,
+        "kv": 7,
+        "count": 63
+      },
+      {
+        "ku": 14,
+        "kv": 10,
+        "count": 64
+      },
+      {
+        "ku": 9,
+        "kv": 11,
+        "count": 64
+      },
+      {
+        "ku": 10,
+        "kv": 14,
+        "count": 64
+      },
+      {
+        "ku": 2,
+        "kv": 6,
+        "count": 69
+      },
+      {
+        "ku": 6,
+        "kv": 2,
+        "count": 66
+      },
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 63
+      },
+      {
+        "ku": 15,
+        "kv": 13,
+        "count": 52
+      },
+      {
+        "ku": 7,
+        "kv": 5,
+        "count": 77
+      },
+      {
+        "ku": 3,
+        "kv": 9,
+        "count": 64
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 62
+      },
+      {
+        "ku": 5,
+        "kv": 15,
+        "count": 67
+      },
+      {
+        "ku": 8,
+        "kv": 8,
+        "count": 67
+      }
+    ],
+    "transpiled_depth": 761,
+    "transpiled_qubits": 12,
+    "transpiled_total_operations": 1023,
+    "transpiled_two_qubit_operations": 16,
+    "transpiled_operation_counts": {
+      "mcx": 512,
+      "x": 471,
+      "cp": 12,
+      "h": 9,
+      "measure": 8,
+      "u2": 7,
+      "swap": 4
+    },
+    "transpile_seconds": 0.05147944000000848,
+    "simulation_seconds": 0.019012656000001016,
+    "backend": "AerSimulator ideal",
+    "qiskit_version": "1.4.6",
+    "qiskit_aer_version": "0.17.2",
+    "optimization_level": 1,
+    "oracle": "reversible multi-controlled-X table oracle",
+    "limitations": [
+      "Instância ECDLP reduzida em curva curta de Weierstrass.",
+      "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
+      "AerSimulator ideal: sem ruído físico ou execução em QPU.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  },
+  {
+    "name": "C32_F23",
+    "curve": {
+      "p": 23,
+      "a": 1,
+      "b": 10
+    },
+    "P": [
+      5,
+      5
+    ],
+    "Q": [
+      8,
+      22
+    ],
+    "order": 32,
+    "secret_d": 3,
+    "phase_qubits_each": 5,
+    "point_qubits": 5,
+    "logical_qubits": 15,
+    "shots": 1024,
+    "seed": 20261129,
+    "recovered_d": 3,
+    "success": true,
+    "informative_shots": 537,
+    "informative_fraction": 0.5244140625,
+    "period_relation_fraction": 1.0,
+    "measurement_counts": [
+      {
+        "ku": 23,
+        "kv": 5,
+        "count": 22
+      },
+      {
+        "ku": 3,
+        "kv": 9,
+        "count": 34
+      },
+      {
+        "ku": 5,
+        "kv": 15,
+        "count": 39
+      },
+      {
+        "ku": 19,
+        "kv": 25,
+        "count": 37
+      },
+      {
+        "ku": 8,
+        "kv": 24,
+        "count": 27
+      },
+      {
+        "ku": 14,
+        "kv": 10,
+        "count": 33
+      },
+      {
+        "ku": 2,
+        "kv": 6,
+        "count": 35
+      },
+      {
+        "ku": 21,
+        "kv": 31,
+        "count": 34
+      },
+      {
+        "ku": 12,
+        "kv": 4,
+        "count": 23
+      },
+      {
+        "ku": 6,
+        "kv": 18,
+        "count": 36
+      },
+      {
+        "ku": 15,
+        "kv": 13,
+        "count": 37
+      },
+      {
+        "ku": 27,
+        "kv": 17,
+        "count": 36
+      },
+      {
+        "ku": 29,
+        "kv": 23,
+        "count": 37
+      },
+      {
+        "ku": 24,
+        "kv": 8,
+        "count": 33
+      },
+      {
+        "ku": 9,
+        "kv": 27,
+        "count": 33
+      },
+      {
+        "ku": 16,
+        "kv": 16,
+        "count": 28
+      },
+      {
+        "ku": 30,
+        "kv": 26,
+        "count": 31
+      },
+      {
+        "ku": 11,
+        "kv": 1,
+        "count": 29
+      },
+      {
+        "ku": 22,
+        "kv": 2,
+        "count": 27
+      },
+      {
+        "ku": 28,
+        "kv": 20,
+        "count": 34
+      },
+      {
+        "ku": 20,
+        "kv": 28,
+        "count": 26
+      },
+      {
+        "ku": 10,
+        "kv": 30,
+        "count": 29
+      },
+      {
+        "ku": 7,
+        "kv": 21,
+        "count": 38
+      },
+      {
+        "ku": 26,
+        "kv": 14,
+        "count": 30
+      },
+      {
+        "ku": 25,
+        "kv": 11,
+        "count": 29
+      },
+      {
+        "ku": 17,
+        "kv": 19,
+        "count": 34
+      },
+      {
+        "ku": 0,
+        "kv": 0,
+        "count": 29
+      },
+      {
+        "ku": 4,
+        "kv": 12,
+        "count": 40
+      },
+      {
+        "ku": 31,
+        "kv": 29,
+        "count": 33
+      },
+      {
+        "ku": 1,
+        "kv": 3,
+        "count": 40
+      },
+      {
+        "ku": 13,
+        "kv": 7,
+        "count": 25
+      },
+      {
+        "ku": 18,
+        "kv": 22,
+        "count": 26
+      }
+    ],
+    "transpiled_depth": 3563,
+    "transpiled_qubits": 15,
+    "transpiled_total_operations": 4587,
+    "transpiled_two_qubit_operations": 24,
+    "transpiled_operation_counts": {
+      "mcx": 2560,
+      "x": 1973,
+      "cp": 20,
+      "h": 11,
+      "measure": 10,
+      "u2": 9,
+      "swap": 4
+    },
+    "transpile_seconds": 0.10191509300000234,
+    "simulation_seconds": 0.14527580499998294,
+    "backend": "AerSimulator ideal",
+    "qiskit_version": "1.4.6",
+    "qiskit_aer_version": "0.17.2",
+    "optimization_level": 1,
+    "oracle": "reversible multi-controlled-X table oracle",
+    "limitations": [
+      "Instância ECDLP reduzida em curva curta de Weierstrass.",
+      "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
+      "AerSimulator ideal: sem ruído físico ou execução em QPU.",
+      "Não quebra Curve25519 nem chaves X25519 reais."
+    ]
+  }
+]
