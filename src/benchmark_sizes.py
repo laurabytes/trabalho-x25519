@@ -15,7 +15,7 @@ figures_dir.mkdir(exist_ok=True)
 rows = [
     ["Chave pública", "X25519", 32, "ML-KEM-768", 1184],
     ["Chave privada", "X25519 (escalar bruto)", 32, "ML-KEM-768 (decapsulation key)", 2400],
-    ["Mensagem de troca", "X25519 (duas shares públicas)", 64, "ML-KEM-768 (ciphertext)", 1088],
+    ["Mensagem de estabelecimento", "X25519 (chave pública)", 32, "ML-KEM-768 (ciphertext)", 1088],
     ["Segredo compartilhado", "X25519", 32, "ML-KEM-768", 32],
 ]
 
@@ -34,8 +34,8 @@ with (data_dir / "size_comparison.csv").open("w", newline="") as file:
         ])
 
 sessions = 1_000_000
-x25519_bytes = 64 * sessions
-ml_kem_bytes = 1088 * sessions + 1184
+x25519_bytes = 32 * sessions
+ml_kem_bytes = 1088 * sessions
 with (data_dir / "communication_scenario.csv").open("w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["sessions", "x25519_bytes", "ml_kem_768_bytes", "additional_bytes"])
@@ -43,7 +43,7 @@ with (data_dir / "communication_scenario.csv").open("w", newline="") as file:
 
 plt.figure(figsize=(8, 5))
 plt.bar(
-    ["X25519: 2 public shares", "ML-KEM-768: ciphertext + public key"],
+    ["X25519: public key", "ML-KEM-768: ciphertext"],
     [x25519_bytes / 1e9, ml_kem_bytes / 1e9],
 )
 plt.ylabel("GB para 1.000.000 de sessões (decimal)")
