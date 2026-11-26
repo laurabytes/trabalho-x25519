@@ -1,21 +1,21 @@
 Ambiente de benchmark reproduzido automaticamente
 Python: 3.12.16
-Plataforma: Linux-7.0.0-1016-aws-x86_64-with-glibc2.43
+Plataforma: Linux-7.0.0-1020-azure-x86_64-with-glibc2.43
 OpenSSL: OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)
 Qiskit: 1.4.6
 Qiskit Aer: 0.17.2
 Repetições: 30
-X25519 KeyGen par (mediana ms): 0.052943
-X25519 duas operações exchange (mediana ms): 0.057261
-ML-KEM-768 KeyGen + exportação (mediana ms): 5.717732
-ML-KEM-768 Encaps (mediana ms): 2.77988
-ML-KEM-768 Decaps (mediana ms): 2.484808
-CPU user do processo (s): 0.053578
-CPU system do processo (s): 0.01451
-Pico RSS do processo: 28328 KiB
-CPU user dos subprocessos (s): 0.214703
-CPU system dos subprocessos (s): 0.112786
-Pico RSS dos subprocessos: 28328 KiB
+X25519 KeyGen par (mediana ms): 0.070947
+X25519 duas operações exchange (mediana ms): 0.074293
+ML-KEM-768 KeyGen + exportação (mediana ms): 9.459188
+ML-KEM-768 Encaps (mediana ms): 4.60536
+ML-KEM-768 Decaps (mediana ms): 4.20254
+CPU user do processo (s): 0.086127
+CPU system do processo (s): 0.033659
+Pico RSS do processo: 27972 KiB
+CPU user dos subprocessos (s): 0.305096
+CPU system dos subprocessos (s): 0.224333
+Pico RSS dos subprocessos: 27972 KiB
 Segredos compartilhados coincidiram nas execuções disponíveis.
 Tempos incluem overhead de interfaces diferentes e não são comparação intrínseca das primitivas.
 RSS é pico agregado, não medição por operação; energia não foi medida.
