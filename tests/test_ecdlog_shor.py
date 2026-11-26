@@ -34,6 +34,9 @@ class ECDLPTests(unittest.TestCase):
                 self.assertTrue(result["success"])
                 self.assertEqual(result["recovered_d"], 3)
                 self.assertAlmostEqual(result["period_relation_fraction"], 1.0)
+                self.assertEqual(sum(item["count"] for item in result["measurement_counts"]), 4096)
+                self.assertGreater(result["informative_fraction"], 0.4)
+                self.assertLess(result["informative_fraction"], 0.6)
 
 
 if __name__ == "__main__":
