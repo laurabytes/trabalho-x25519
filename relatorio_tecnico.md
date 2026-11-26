@@ -22,10 +22,10 @@ O oráculo é reversível e implementado com portas multi-controladas X. Para me
 
 | Instância | p (bits) | Ordem r (bits) | P | Q | Qubits lógicos | Qubits transpilados | Profundidade | Operações totais | CX | Shots | Tempo total (s) | P(correta/shot) | d recuperado |
 |---|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|
-| C4_F5 | 5 (3) | 4 (2) | (1,2) | (1,3) | 6 | 8 | 679 | 892 | 298 | 1.024 | 0,086 | 48,44% | 3 |
-| C8_F5 | 5 (3) | 8 (3) | (0,1) | (1,4) | 9 | 13 | 6.733 | 8.742 | 2.898 | 1.024 | 0,156 | 49,51% | 3 |
-| C16_F11 | 11 (4) | 16 (4) | (0,1) | (8,1) | 12 | 18 | 50.199 | 64.992 | 21.540 | 1.024 | 0,739 | 50,00% | 3 |
-| C32_F23 | 23 (5) | 32 (5) | (5,5) | (8,22) | 15 | 23 | 322.591 | 417.102 | 138.292 | 1.024 | 4,357 | 52,44% | 3 |
+| C4_F5 | 5 (3) | 4 (2) | (1,2) | (1,3) | 6 | 8 | 679 | 892 | 298 | 1.024 | 0,078 | 48,44% | 3 |
+| C8_F5 | 5 (3) | 8 (3) | (0,1) | (1,4) | 9 | 13 | 6.733 | 8.742 | 2.898 | 1.024 | 0,177 | 49,51% | 3 |
+| C16_F11 | 11 (4) | 16 (4) | (0,1) | (8,1) | 12 | 18 | 50.199 | 64.992 | 21.540 | 1.024 | 0,722 | 50,00% | 3 |
+| C32_F23 | 23 (5) | 32 (5) | (5,5) | (8,22) | 15 | 23 | 322.591 | 417.102 | 138.292 | 1.024 | 4,281 | 52,44% | 3 |
 
 Em todas as quatro instâncias, a fração observada de amostras que satisfaz a relação de período foi 1,0 e o escalar d=3 foi recuperado. A probabilidade empírica de uma medição individual ser informativa e produzir o candidato correto variou de 48,44% a 52,44%; a recuperação final utiliza 1.024 shots. Os tamanhos de p e da ordem r em bits estão indicados entre parênteses na tabela. As contagens por par medido estão em `data/ecdlog_qiskit_measurements.csv`; os resultados completos em `data/ecdlog_qiskit_results.json`; e a tabela de métricas em `data/ecdlog_qiskit_metrics.csv`.
 
@@ -39,7 +39,7 @@ A maior instância resolvida foi C32_F23:
 - Dois registradores de fase com 5 qubits cada e registrador de ponto com 5 qubits.
 - 15 qubits lógicos, mais 8 ancillas limpas na síntese V-chain (23 qubits transpilados).
 - 1.024 shots; profundidade 322.591; 417.102 operações totais, incluindo 138.292 CX; probabilidade empírica de candidato correto por shot: 52,44%.
-- Tempo de construção dos circuitos: 0,510 s; transpilação de métricas: 1,701 s; transpilação do circuito compacto para Aer: 0,136 s; simulação: 0,164 s; tempo total medido: 4,357 s.
+- Tempo de construção dos circuitos: 0,505 s; transpilação de métricas: 1,668 s; transpilação do circuito compacto para Aer: 0,127 s; simulação: 0,163 s; tempo total medido: 4,281 s.
 
 ### Limitações experimentais
 
@@ -86,15 +86,15 @@ O script `src/benchmark_pqc.py` mede 30 repetições e preserva os tempos brutos
 
 | Operação | Mediana (ms) |
 |---|---:|
-| X25519 KeyGen de um par | 0,064080 |
-| X25519 duas operações exchange | 0,063669 |
-| ML-KEM-768 KeyGen + exportação da chave pública | 6,886705 |
-| ML-KEM-768 Encaps | 3,388474 |
-| ML-KEM-768 Decaps | 3,046518 |
+| X25519 KeyGen de um par | 0,062729 |
+| X25519 duas operações exchange | 0,063765 |
+| ML-KEM-768 KeyGen + exportação da chave pública | 6,813892 |
+| ML-KEM-768 Encaps | 3,343627 |
+| ML-KEM-768 Decaps | 2,984659 |
 
 **Ressalva metodológica:** X25519 é medido pela biblioteca Python `cryptography`, enquanto ML-KEM-768 é medido pela interface de linha de comando do OpenSSL. Os tempos incluem overheads diferentes de interfaces, processos e arquivos, portanto não isolam o custo intrínseco das primitivas. Os tamanhos PEM observados pelo OpenSSL também não devem ser confundidos com os tamanhos normativos da seção 4.
 
-O benchmark registra CPU e pico de memória agregados do processo e dos subprocessos OpenSSL. Nesta execução, o pico de RSS do processo foi 27.936 KiB; o consumo de CPU foi 0,060837 s de usuário e 0,026616 s de sistema no processo principal. Esses valores não são medidos por operação. Energia não foi medida. O resumo do ambiente está em `data/environment.txt`, e as amostras brutas em `data/benchmark_pqc.json`.
+O benchmark registra CPU e pico de memória agregados do processo e dos subprocessos OpenSSL. Nesta execução, o pico de RSS do processo foi 28.168 KiB; o consumo de CPU foi 0,054513 s de usuário e 0,029437 s de sistema no processo principal. Esses valores não são medidos por operação. Energia não foi medida. O resumo do ambiente está em `data/environment.txt`, e as amostras brutas em `data/benchmark_pqc.json`.
 
 ## 7. Impactos e estratégia de migração
 
