@@ -10,6 +10,11 @@ class PQCBenchmarkTests(unittest.TestCase):
         self.assertTrue(result["available"])
         self.assertEqual(result["public_key_bytes"], 32)
         self.assertEqual(result["shared_secret_bytes"], 32)
+        self.assertEqual(len(result["raw_measurements_ms"]["keygen"]), 1)
+        self.assertEqual(len(result["raw_measurements_ms"]["encaps"]), 1)
+        self.assertEqual(len(result["raw_measurements_ms"]["decaps"]), 1)
+        self.assertEqual(len(result["raw_measurements_ms"]["keygen_pair"]), 2)
+        self.assertEqual(len(result["raw_measurements_ms"]["two_exchanges"]), 2)
 
     def test_ml_kem_round_trip_when_supported(self):
         openssl = shutil.which("openssl")
