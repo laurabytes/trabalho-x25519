@@ -26,6 +26,7 @@ O benchmark ML-KEM-768 também requer OpenSSL 3.5 ou superior com suporte ao alg
 python src/ecdlog_shor.py --shots 4096
 python src/benchmark_pqc.py --repetitions 30
 python src/benchmark_sizes.py
+python -m unittest discover -s tests
 ```
 
 ## Limites
