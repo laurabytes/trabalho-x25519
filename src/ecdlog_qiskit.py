@@ -7,6 +7,8 @@ import math
 import time
 from pathlib import Path
 
+import qiskit
+import qiskit_aer
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit.circuit.library import QFTGate
 from qiskit_aer import AerSimulator
