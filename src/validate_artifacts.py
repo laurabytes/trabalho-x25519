@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Valida consistência estrutural dos resultados ECDLP e arquivos CSV."""
+"""valida a estrutura dos resultados ecdlp e dos arquivos csv."""
 import csv
 import json
 from pathlib import Path
