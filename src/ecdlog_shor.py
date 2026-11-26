@@ -107,14 +107,8 @@ def run_case(case, secret, shots, seed):
     probabilities /= probabilities.sum()
 
     rng = np.random.default_rng(seed)
-    peak_pairs = [(ku, (d * ku) % r) for ku in range(r)]
-    peak_probabilities = [probabilities[ku, kv] for ku, kv in peak_pairs]
-    peak_probabilities = np.asarray(peak_probabilities, dtype=float)
-    peak_probabilities /= peak_probabilities.sum()
-    peak_counts = rng.multinomial(shots, peak_probabilities)
-    samples = np.zeros((r, r), dtype=int)
-    for (ku, kv), count in zip(peak_pairs, peak_counts):
-        samples[ku, kv] = count
+    # A medição é amostrada da distribuição completa, sem impor os picos.
+    samples = rng.multinomial(shots, probabilities.ravel()).reshape((r, r))
     recovered = []
     informative = 0
     relation_ok = 0
