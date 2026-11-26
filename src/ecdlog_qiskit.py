@@ -225,6 +225,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
             "Não quebra Curve25519 nem chaves X25519 reais.",
         ],
     })
+    metadata["total_experiment_seconds"] = time.perf_counter() - total_start
     return metadata
 
 def main():
