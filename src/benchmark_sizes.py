@@ -8,20 +8,19 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
 
-
 def main():
     data_dir = ROOT / "data"
     figures_dir = ROOT / "figures"
     data_dir.mkdir(exist_ok=True)
     figures_dir.mkdir(exist_ok=True)
-    
+
     rows = [
         ["Chave pública", "X25519", 32, "ML-KEM-768", 1184],
         ["Chave privada", "X25519 (escalar bruto)", 32, "ML-KEM-768 (decapsulation key)", 2400],
         ["Mensagem de estabelecimento", "X25519 (chave pública)", 32, "ML-KEM-768 (ciphertext)", 1088],
         ["Segredo compartilhado", "X25519", 32, "ML-KEM-768", 32],
     ]
-    
+
     with (data_dir / "size_comparison.csv").open("w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -35,7 +34,7 @@ def main():
                 metric, classic_item, classic_bytes, pqc_item, pqc_bytes,
                 difference, round(increase, 2),
             ])
-    
+
     sessions = 1_000_000
     x25519_bytes = 32 * sessions
     ml_kem_bytes = 1088 * sessions
@@ -43,13 +42,13 @@ def main():
         writer = csv.writer(file)
         writer.writerow(["sessions", "x25519_bytes", "ml_kem_768_bytes", "additional_bytes"])
         writer.writerow([sessions, x25519_bytes, ml_kem_bytes, ml_kem_bytes - x25519_bytes])
-    
+
     with (data_dir / "storage_scenario.csv").open("w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["keys", "element", "x25519_bytes", "ml_kem_768_bytes", "additional_bytes"])
         writer.writerow([sessions, "public_keys", 32 * sessions, 1184 * sessions, (1184 - 32) * sessions])
         writer.writerow([sessions, "private_keys_raw", 32 * sessions, 2400 * sessions, (2400 - 32) * sessions])
-    
+
     plt.figure(figsize=(8, 5))
     plt.bar(
         ["X25519: public key", "ML-KEM-768: ciphertext"],
@@ -61,7 +60,7 @@ def main():
     plt.tight_layout()
     plt.savefig(figures_dir / "communication_1m.svg", format="svg", bbox_inches="tight")
     plt.close()
-    
+
     labels = [row[0] for row in rows]
     classic = [row[2] for row in rows]
     pqc = [row[4] for row in rows]
@@ -77,7 +76,7 @@ def main():
     plt.tight_layout()
     plt.savefig(figures_dir / "size_comparison.svg", format="svg", bbox_inches="tight")
     plt.close()
-    
+
     results_path = data_dir / "ecdlog_shor_results.json"
     if results_path.exists():
         results = json.loads(results_path.read_text())
@@ -92,8 +91,7 @@ def main():
         plt.tight_layout()
         plt.savefig(figures_dir / "ecdlog_qubits.svg", format="svg", bbox_inches="tight")
         plt.close()
-    
-    
+
     qiskit_results_path = data_dir / "ecdlog_qiskit_results.json"
     if qiskit_results_path.exists():
         qresults = json.loads(qiskit_results_path.read_text())
@@ -110,7 +108,7 @@ def main():
             writer.writeheader()
             for item in qresults:
                 writer.writerow({key: item.get(key) for key in metric_fields})
-    
+
         case_labels = [item["name"] for item in qresults]
         for field, ylabel, title, filename in [
             ("transpiled_qubits", "Qubits transpilados", "Qubits após síntese do circuito ECDLP", "ecdlog_qiskit_qubits.svg"),
@@ -127,12 +125,11 @@ def main():
             plt.tight_layout()
             plt.savefig(figures_dir / filename, format="svg", bbox_inches="tight")
             plt.close()
-    
+
     print(f"X25519: {x25519_bytes:,} bytes")
     print(f"ML-KEM-768: {ml_kem_bytes:,} bytes")
     print(f"Adicional: {ml_kem_bytes - x25519_bytes:,} bytes")
     print("Tabelas e gráficos atualizados.")
-
 
 if __name__ == "__main__":
     main()
