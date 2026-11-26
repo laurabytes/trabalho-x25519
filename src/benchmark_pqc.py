@@ -190,16 +190,23 @@ def main():
         f"ML-KEM-768 KeyGen + exportação (mediana ms): {ml.get('keygen_ms_median')}",
         f"ML-KEM-768 Encaps (mediana ms): {ml.get('encaps_ms_median')}",
         f"ML-KEM-768 Decaps (mediana ms): {ml.get('decaps_ms_median')}",
-        f"CPU user do processo (s): {resource_data.get('process_cpu_user_seconds')}",
-        f"CPU system do processo (s): {resource_data.get('process_cpu_system_seconds')}",
-        f"Pico RSS do processo: {resource_data.get('process_peak_rss')} {resource_data.get('rss_unit')}",
-        f"CPU user dos subprocessos (s): {resource_data.get('children_cpu_user_seconds')}",
-        f"CPU system dos subprocessos (s): {resource_data.get('children_cpu_system_seconds')}",
-        f"Pico RSS dos subprocessos: {resource_data.get('children_peak_rss')} {resource_data.get('rss_unit')}",
+    ]
+    if resource_data.get("available"):
+        environment_lines.extend([
+            f"CPU user do processo (s): {resource_data['process_cpu_user_seconds']}",
+            f"CPU system do processo (s): {resource_data['process_cpu_system_seconds']}",
+            f"Pico RSS do processo: {resource_data['process_peak_rss']} {resource_data['rss_unit']}",
+            f"CPU user dos subprocessos (s): {resource_data['children_cpu_user_seconds']}",
+            f"CPU system dos subprocessos (s): {resource_data['children_cpu_system_seconds']}",
+            f"Pico RSS dos subprocessos: {resource_data['children_peak_rss']} {resource_data['rss_unit']}",
+        ])
+    else:
+        environment_lines.append(resource_data.get("note", "Métricas de recursos indisponíveis."))
+    environment_lines.extend([
         "Segredos compartilhados coincidiram nas execuções disponíveis.",
         "Tempos incluem overhead de interfaces diferentes e não são comparação intrínseca das primitivas.",
         "RSS é pico agregado, não medição por operação; energia não foi medida.",
-    ]
+    ])
     Path("data/environment.txt").write_text("\n".join(environment_lines) + "\n")
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
