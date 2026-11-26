@@ -1,20 +1,29 @@
 {
   "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
   "python": "3.13.5",
+  "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+  "repetitions": 30,
   "x25519": {
     "available": true,
-    "repetitions": 10,
+    "implementation": "Python cryptography",
     "public_key_bytes": 32,
     "private_key_raw_bytes": 32,
     "shared_secret_bytes": 32,
-    "keygen_pair_ms_median": 0.068328,
-    "two_exchanges_ms_median": 0.072513,
-    "note": "Python cryptography timings; includes wrapper/runtime overhead."
+    "keygen_pair_ms_median": 0.062673,
+    "two_exchanges_ms_median": 0.063885
   },
   "ml_kem_768": {
-    "available": false,
-    "reason": "ML-KEM-768 is advertised, but a portable CLI keygen/encap/decap workflow is not assumed by this script. Use the OpenSSL EVP API or liboqs binding and record separate timings.",
-    "openssl_version": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
-    "algorithm_listing": "  { 1.2.840.113549.1.1.1, 2.5.8.1.1, RSA, rsaEncryption } @ default\n  { 1.2.840.10045.2.1, EC, id-ecPublicKey } @ default\n  { 1.3.101.110, X25519 } @ default\n  { 1.3.101.111, X448 } @ default\n  { 2.16.840.1.101.3.4.4.1, id-alg-ml-kem-512, ML-KEM-512, MLKEM512 } @ default\n  { 2.16.840.1.101.3.4.4.2, id-alg-ml-kem-768, ML-KEM-768, MLKEM768 } @ default\n  { 2.16.840.1.101.3.4.4.3, id-alg-ml-kem-1024, ML-KEM-1024, MLKEM1024 } @ default\n  X25519MLKEM768 @ default\n  X448MLKEM1024 @ default\n  SecP256r1MLKEM768 @ default\n  SecP384r1MLKEM1024 @ default\n"
+    "available": true,
+    "implementation": "OpenSSL CLI",
+    "repetitions": 30,
+    "public_key_pem_bytes": 1686,
+    "private_key_pem_bytes": 3439,
+    "ciphertext_bytes": 1088,
+    "shared_secret_bytes": 32,
+    "keygen_ms_median": 9.5043225,
+    "encaps_ms_median": 4.7147025,
+    "decaps_ms_median": 4.2845175,
+    "secret_match": true,
+    "note": "Tempos incluem overhead de processos e I/O; não são benchmark puro das primitivas."
   }
 }
