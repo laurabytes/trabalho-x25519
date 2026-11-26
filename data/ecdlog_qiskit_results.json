@@ -48,25 +48,27 @@
         "count": 278
       }
     ],
-    "transpiled_depth": 34,
-    "transpiled_qubits": 6,
-    "transpiled_total_operations": 53,
-    "transpiled_two_qubit_operations": 4,
+    "transpiled_depth": 679,
+    "transpiled_qubits": 8,
+    "transpiled_total_operations": 892,
+    "transpiled_two_qubit_operations": 298,
     "transpiled_operation_counts": {
-      "x": 21,
-      "mcx": 16,
-      "h": 5,
-      "measure": 4,
-      "u2": 3,
-      "swap": 2,
-      "cp": 2
+      "u": 590,
+      "cx": 298,
+      "measure": 4
     },
-    "transpile_seconds": 0.05811569499999791,
-    "simulation_seconds": 0.0025598699999989094,
+    "transpile_seconds": 0.01685962700000232,
+    "simulation_transpile_seconds": 0.05245003299999951,
+    "simulation_seconds": 0.003951582999995651,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
-    "optimization_level": 1,
+    "optimization_level_simulation": 1,
+    "metrics_basis": [
+      "u",
+      "cx"
+    ],
+    "metrics_synthesis": "V-chain with clean ancillas; optimization level 0",
     "oracle": "reversible multi-controlled-X table oracle",
     "limitations": [
       "Instância ECDLP reduzida em curva curta de Weierstrass.",
@@ -144,25 +146,27 @@
         "count": 115
       }
     ],
-    "transpiled_depth": 159,
-    "transpiled_qubits": 9,
-    "transpiled_total_operations": 227,
-    "transpiled_two_qubit_operations": 8,
+    "transpiled_depth": 6733,
+    "transpiled_qubits": 13,
+    "transpiled_total_operations": 8742,
+    "transpiled_two_qubit_operations": 2898,
     "transpiled_operation_counts": {
-      "x": 105,
-      "mcx": 96,
-      "h": 7,
-      "cp": 6,
-      "measure": 6,
-      "u2": 5,
-      "swap": 2
+      "u": 5838,
+      "cx": 2898,
+      "measure": 6
     },
-    "transpile_seconds": 0.041182595000009314,
-    "simulation_seconds": 0.005147700999998506,
+    "transpile_seconds": 0.03692352699999901,
+    "simulation_transpile_seconds": 0.05169907600000556,
+    "simulation_seconds": 0.006494482000000801,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
-    "optimization_level": 1,
+    "optimization_level_simulation": 1,
+    "metrics_basis": [
+      "u",
+      "cx"
+    ],
+    "metrics_synthesis": "V-chain with clean ancillas; optimization level 0",
     "oracle": "reversible multi-controlled-X table oracle",
     "limitations": [
       "Instância ECDLP reduzida em curva curta de Weierstrass.",
@@ -280,25 +284,27 @@
         "count": 67
       }
     ],
-    "transpiled_depth": 761,
-    "transpiled_qubits": 12,
-    "transpiled_total_operations": 1023,
-    "transpiled_two_qubit_operations": 16,
+    "transpiled_depth": 50199,
+    "transpiled_qubits": 18,
+    "transpiled_total_operations": 64992,
+    "transpiled_two_qubit_operations": 21540,
     "transpiled_operation_counts": {
-      "mcx": 512,
-      "x": 471,
-      "cp": 12,
-      "h": 9,
-      "measure": 8,
-      "u2": 7,
-      "swap": 4
+      "u": 43444,
+      "cx": 21540,
+      "measure": 8
     },
-    "transpile_seconds": 0.05147944000000848,
-    "simulation_seconds": 0.019012656000001016,
+    "transpile_seconds": 0.26452781100000067,
+    "simulation_transpile_seconds": 0.06389664099999948,
+    "simulation_seconds": 0.02229384500000009,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
-    "optimization_level": 1,
+    "optimization_level_simulation": 1,
+    "metrics_basis": [
+      "u",
+      "cx"
+    ],
+    "metrics_synthesis": "V-chain with clean ancillas; optimization level 0",
     "oracle": "reversible multi-controlled-X table oracle",
     "limitations": [
       "Instância ECDLP reduzida em curva curta de Weierstrass.",
@@ -496,25 +502,27 @@
         "count": 26
       }
     ],
-    "transpiled_depth": 3563,
-    "transpiled_qubits": 15,
-    "transpiled_total_operations": 4587,
-    "transpiled_two_qubit_operations": 24,
+    "transpiled_depth": 322591,
+    "transpiled_qubits": 23,
+    "transpiled_total_operations": 417102,
+    "transpiled_two_qubit_operations": 138292,
     "transpiled_operation_counts": {
-      "mcx": 2560,
-      "x": 1973,
-      "cp": 20,
-      "h": 11,
-      "measure": 10,
-      "u2": 9,
-      "swap": 4
+      "u": 278800,
+      "cx": 138292,
+      "measure": 10
     },
-    "transpile_seconds": 0.10191509300000234,
-    "simulation_seconds": 0.14527580499998294,
+    "transpile_seconds": 1.7914724170000014,
+    "simulation_transpile_seconds": 0.13416875400000094,
+    "simulation_seconds": 0.16552552699999978,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
-    "optimization_level": 1,
+    "optimization_level_simulation": 1,
+    "metrics_basis": [
+      "u",
+      "cx"
+    ],
+    "metrics_synthesis": "V-chain with clean ancillas; optimization level 0",
     "oracle": "reversible multi-controlled-X table oracle",
     "limitations": [
       "Instância ECDLP reduzida em curva curta de Weierstrass.",
