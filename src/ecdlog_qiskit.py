@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Circuito Qiskit/Aer para ECDLP reduzido com oráculo reversível por tabela."""
+"""circuito qiskit/aer para ecdlp reduzido com oráculo reversível por tabela."""
 import argparse
 import csv
 import json
