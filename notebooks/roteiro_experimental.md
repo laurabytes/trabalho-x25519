@@ -1,16 +1,17 @@
-# roteiro experimental
+# Roteiro experimental
 
-## ambiente
+## Ambiente
 
 - Python 3.10 ou superior.
-- Dependências listadas em `requirements.txt`.
-- OpenSSL 3.5+ com suporte a ML-KEM-768 para o benchmark completo.
+- Dependências de `requirements.txt`, incluindo Qiskit e Qiskit Aer.
+- OpenSSL 3.5+ com ML-KEM-768 habilitado para o benchmark completo.
 
-## execução
+## Execução
 
 Na raiz do repositório:
 
 ```bash
+python src/ecdlog_qiskit.py --shots 1024 --secret 3 --seed 20261126
 python src/ecdlog_shor.py --shots 4096 --secret 3 --seed 20261110
 python src/benchmark_pqc.py --repetitions 30
 python src/benchmark_sizes.py
@@ -18,10 +19,14 @@ python src/validate_artifacts.py
 python -m unittest discover -s tests -v
 ```
 
-O script ECDLP grava `data/ecdlog_shor_results.json` e `data/ecdlog_shor_measurements.csv`. O benchmark PQC grava `data/benchmark_pqc.json`. A comparação de tamanhos atualiza os CSVs e gráficos em `figures/`. O validador verifica estrutura, contagem de shots, relações de período e consistência dos CSVs.
+O circuito Qiskit/Aer grava `data/ecdlog_qiskit_results.json` e `data/ecdlog_qiskit_measurements.csv`, incluindo distribuição das medições, escalar recuperado, probabilidade empírica de candidato correto, qubits lógicos e transpilados, profundidade, operações totais, CX e tempos. A simulação NumPy é mantida como referência matemática independente.
 
-## interpretação
+O benchmark PQC grava `data/benchmark_pqc.json` com as amostras brutas e medianas de KeyGen, Encaps e Decaps, além de CPU/RSS agregados. A comparação de tamanhos gera `data/size_comparison.csv`, `data/communication_scenario.csv`, `data/storage_scenario.csv`, `data/ecdlog_qiskit_metrics.csv` e os gráficos SVG em `figures/`.
 
-A implementação ECDLP usa NumPy, operações clássicas de pontos, oráculo por tabela e QFT exata por matriz. Não é um circuito de portas, não é transpilada em Qiskit/Aer e não mede profundidade ou contagem de gates. Não inclui ruído nem hardware. Os qubits são contagens abstratas dos registradores do modelo.
+## Interpretação
 
-X25519 é executado pela biblioteca Python `cryptography`; ML-KEM-768, pela CLI do OpenSSL. Os tempos incluem overheads diferentes e não são comparação direta do desempenho intrínseco das primitivas. Se ML-KEM-768 não estiver disponível no OpenSSL local, o script registra essa indisponibilidade.
+O experimento principal usa um circuito Qiskit/Aer com oráculo reversível por tabela clássica, QFT inversa e pós-processamento clássico. Para medir recursos elementares, uma cópia equivalente usa síntese V-chain com ancillas e é transpilada para a base `{u, cx}`; a versão compacta equivalente é executada no AerSimulator ideal.
+
+O oráculo não implementa aritmética de curva escalável. Aer não modela ruído físico nem execução em QPU. As métricas de portas correspondem ao oráculo reduzido sintetizado, não a uma estimativa de recursos para quebrar Curve25519 real.
+
+X25519 é medido pela biblioteca Python `cryptography`; ML-KEM-768, pela CLI do OpenSSL. Os tempos incluem overheads diferentes e não são comparação direta do desempenho intrínseco das primitivas. CPU e RSS são agregados, não por operação; energia não é medida. Se ML-KEM-768 não estiver disponível no OpenSSL local, o script registra a indisponibilidade.
