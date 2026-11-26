@@ -1,0 +1,4 @@
+Generated in ChatGPT artifact environment; not the student's MacBook.
+Python: 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]
+Platform: Linux-6.18.57-x86_64-with-glibc2.41
+Re-run benchmarks on the target machine before reporting timings.
