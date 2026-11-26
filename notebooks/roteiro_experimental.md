@@ -1,34 +1,37 @@
-# Roteiro de execução e registro experimental
+# Roteiro experimental
 
-Este roteiro é um caderno textual de laboratório. Os comandos produzem arquivos JSON/CSV que podem ser anexados ao relatório.
+Os scripts geram os resultados em `data/`. Registre o ambiente e mantenha os arquivos gerados junto da entrega.
 
-## A. ECDLP toy
+## 1. ECDLP reduzido
 
 ```bash
-python src/toy_ecdlog.py --p 17 --a 2 --b 2 --secret 3 --shots 4096 --seed 2026
+python src/ecdlog_shor.py --shots 4096 --seed 20261110
 ```
 
-Anote a curva, P, Q, ordem, d e a distribuição. O script não executa circuito quântico. Para completar a exigência de Shor em circuito, construa um oráculo reversível para a ação do grupo e registre transpilation metrics do Qiskit Aer.
+O script executa quatro instâncias de curvas curtas de Weierstrass, calcula `Q=3P`, simula o oráculo de pontos e a QFT exata, amostra os pares de Fourier e recupera o escalar por inversão modular. A saída inclui os parâmetros, a fração de amostras informativas e a distribuição em CSV.
 
-## B. X25519
+Limite: simulação ideal NumPy, sem transpilação Qiskit/Aer, ruído ou hardware. Não representa ataque a Curve25519 real.
+
+## 2. Comparação criptográfica
 
 ```bash
 python src/benchmark_pqc.py --repetitions 30
 ```
 
-Confirme que os segredos dos dois lados coincidem. Reexecute pelo menos cinco vezes e informe mediana e dispersão.
+O fluxo valida X25519 nos dois sentidos e executa ML-KEM-768 em OpenSSL 3.5+: KeyGen, Encaps e Decaps. Os segredos são comparados byte a byte. Os tempos CLI incluem inicialização de processos e I/O.
 
-## C. ML-KEM-768
+## 3. Tamanhos e comunicação
 
-Use uma implementação que exponha KeyGen, Encaps e Decaps (OpenSSL EVP, liboqs ou biblioteca auditada). Registre separadamente:
-- tempo KeyGen;
-- tempo Encaps;
-- tempo Decaps;
-- bytes da chave pública, chave privada e ciphertext;
-- confirmação de igualdade dos segredos.
+```bash
+python src/benchmark_sizes.py
+```
 
-Não misture tempo de inicialização da biblioteca com tempo de operação sem declarar isso.
+O cenário usa duas shares públicas efêmeras X25519 por sessão e uma chave pública ML-KEM provisionada uma vez, mais um ciphertext por sessão.
 
-## D. Ambiente
+## 4. Testes
 
-Registre SO, CPU, RAM, Python, OpenSSL, bibliotecas e parâmetros. Não preencha métricas de circuito se não tiver um circuito real medido.
+```bash
+python -m unittest discover -s tests
+```
+
+Registre SO, CPU, RAM, Python, OpenSSL e versões das bibliotecas. Não compare diretamente tempos obtidos por interfaces ou ambientes diferentes.
