@@ -20,14 +20,14 @@ O experimento principal está implementado em `src/ecdlog_qiskit.py`. O circuito
 
 O oráculo é reversível e implementado com portas multi-controladas X. Para medir recursos em uma base elementar, uma cópia equivalente usa ancillas limpas na síntese V-chain e é transpilada para {u, cx}. A execução ideal das medições é feita no AerSimulator com a versão compacta equivalente do circuito. A síntese de métricas usa optimization_level=0; a execução no simulador usa optimization_level=1. Ambiente: Qiskit 1.4.6 e Qiskit Aer 0.17.2.
 
-| Instância | p | Ordem r | P | Q | Qubits lógicos | Qubits transpilados | Profundidade | Operações totais | CX | Shots | d recuperado |
+| Instância | p (bits) | Ordem r (bits) | P | Q | Qubits lógicos | Qubits transpilados | Profundidade | Operações totais | CX | Shots | P(correcta/shot) | d recuperado |
 |---|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|
-| C4_F5 | 5 | 4 | (1,2) | (1,3) | 6 | 8 | 679 | 892 | 298 | 1.024 | 3 |
-| C8_F5 | 5 | 8 | (0,1) | (1,4) | 9 | 13 | 6.733 | 8.742 | 2.898 | 1.024 | 3 |
-| C16_F11 | 11 | 16 | (0,1) | (8,1) | 12 | 18 | 50.199 | 64.992 | 21.540 | 1.024 | 3 |
-| C32_F23 | 23 | 32 | (5,5) | (8,22) | 15 | 23 | 322.591 | 417.102 | 138.292 | 1.024 | 3 |
+| C4_F5 | 5 (3) | 4 (2) | (1,2) | (1,3) | 6 | 8 | 679 | 892 | 298 | 1.024 | 48,44% | 3 |
+| C8_F5 | 5 (3) | 8 (3) | (0,1) | (1,4) | 9 | 13 | 6.733 | 8.742 | 2.898 | 1.024 | 49,51% | 3 |
+| C16_F11 | 11 (4) | 16 (4) | (0,1) | (8,1) | 12 | 18 | 50.199 | 64.992 | 21.540 | 1.024 | 50,00% | 3 |
+| C32_F23 | 23 (5) | 32 (5) | (5,5) | (8,22) | 15 | 23 | 322.591 | 417.102 | 138.292 | 1.024 | 52,44% | 3 |
 
-Em todas as quatro instâncias, a fração observada de amostras que satisfaz a relação de período foi 1,0 e o escalar d=3 foi recuperado. A fração informativa (ku coprimo à ordem) variou de 0,4844 a 0,5244. As contagens por par medido estão em `data/ecdlog_qiskit_measurements.csv`; os resultados completos em `data/ecdlog_qiskit_results.json`; e a tabela de métricas em `data/ecdlog_qiskit_metrics.csv`.
+Em todas as quatro instâncias, a fração observada de amostras que satisfaz a relação de período foi 1,0 e o escalar d=3 foi recuperado. A probabilidade empírica de uma medição individual ser informativa e produzir o candidato correto variou de 48,44% a 52,44%; a recuperação final utiliza 1.024 shots. Os tamanhos de p e da ordem r em bits estão indicados entre parênteses na tabela. As contagens por par medido estão em `data/ecdlog_qiskit_measurements.csv`; os resultados completos em `data/ecdlog_qiskit_results.json`; e a tabela de métricas em `data/ecdlog_qiskit_metrics.csv`.
 
 ### Maior instância
 
@@ -38,7 +38,7 @@ A maior instância resolvida foi C32_F23:
 - Escalar conhecido e recuperado: d=3.
 - Dois registradores de fase com 5 qubits cada e registrador de ponto com 5 qubits.
 - 15 qubits lógicos, mais 8 ancillas limpas na síntese V-chain (23 qubits transpilados).
-- 1.024 shots; profundidade 322.591; 417.102 operações totais, incluindo 138.292 CX.
+- 1.024 shots; profundidade 322.591; 417.102 operações totais, incluindo 138.292 CX; probabilidade empírica de candidato correto por shot: 52,44%.
 - Tempo de transpilação para métricas: 1,791 s; tempo de transpilação do circuito compacto para Aer: 0,134 s; simulação: 0,166 s.
 
 ### Limitações experimentais
@@ -47,7 +47,7 @@ O oráculo usa uma tabela clássica de pontos e não implementa aritmética reve
 
 A fatoração anterior de N=77, com a=30, valida parte do fluxo de Shor, mas não é um ataque ao X25519 e não é contabilizada como resultado ECDLP neste trabalho.
 
-## 3. Alternativa pós-quântica: ML-KEM-768
+## 3. Comparação com parâmetros reais\n\nO X25519 real opera sobre Curve25519, definida sobre um campo de 255 bits, e oferece aproximadamente 128 bits de segurança clássica. A maior instância deste experimento usa p=23 (5 bits) e ordem de subgrupo r=32 (5 bits). Portanto, o modelo reduzido é muito menor e serve para observar a estrutura matemática, não para estimar diretamente o custo de quebrar Curve25519.\n\nOs qubits lógicos representam os registradores do algoritmo reduzido. Os 23 qubits transpilados da maior instância incluem 8 ancillas para decompor o oráculo; não são uma estimativa de qubits físicos para um ataque real. Uma execução em escala real exigiria correção quântica de erros, muitos qubits físicos por qubit lógico, fidelidade alta de portas, controle de decoerência, conectividade adequada e circuitos aritméticos muito mais complexos.\n\n## 4. Alternativa pós-quântica: ML-KEM-768
 
 ML-KEM-768 é um mecanismo de encapsulamento de chaves baseado em reticulados, padronizado pelo NIST no FIPS 203. Seu fluxo é:
 
@@ -57,7 +57,7 @@ ML-KEM-768 é um mecanismo de encapsulamento de chaves baseado em reticulados, p
 
 ML-KEM é um KEM, não um algoritmo de assinatura digital. A migração de X25519 para ML-KEM não substitui, por si só, os mecanismos de autenticação e assinatura do protocolo.
 
-## 4. Comparação quantitativa de tamanhos e comunicação
+## 5. Comparação quantitativa de tamanhos, armazenamento e comunicação
 
 A tabela utiliza tamanhos normativos dos elementos criptográficos, não arquivos PEM exportados pelo OpenSSL.
 
@@ -68,11 +68,11 @@ A tabela utiliza tamanhos normativos dos elementos criptográficos, não arquivo
 | Mensagem considerada no estabelecimento | 32 B (chave pública) | 1.088 B (ciphertext) | +1.056 B (+3.300%) |
 | Segredo compartilhado | 32 B | 32 B | 0 B |
 
-Seguindo o enunciado, considera-se uma chave pública X25519 de 32 B ou um ciphertext ML-KEM-768 de 1.088 B por estabelecimento. Em 1.000.000 de estabelecimentos, os volumes são 32.000.000 B e 1.088.000.000 B, respectivamente, com acréscimo de 1.056.000.000 B (1,056 GB decimais).
+**Armazenamento — 1.000.000 de chaves:** para chaves públicas, X25519 ocupa 32.000.000 B (32 MB) e ML-KEM-768 ocupa 1.184.000.000 B (1,184 GB), acréscimo de 1.152.000.000 B. Para chaves privadas brutas, os valores são 32.000.000 B e 2.400.000.000 B, acréscimo de 2.368.000.000 B. Os cálculos estão em `data/storage_scenario.csv`.\n\n**Comunicação — 1.000.000 de estabelecimentos:** considera-se uma chave pública X25519 de 32 B ou um ciphertext ML-KEM-768 de 1.088 B por estabelecimento. Os volumes são 32.000.000 B e 1.088.000.000 B, respectivamente, com acréscimo de 1.056.000.000 B (1,056 GB decimais).
 
 O cenário considera somente esses elementos; não inclui cabeçalhos, certificados, retransmissões ou outras mensagens do protocolo. Os valores reproduzíveis estão em `data/communication_scenario.csv`.
 
-## 5. Processamento, recursos e reprodutibilidade
+## 6. Processamento, recursos e reprodutibilidade
 
 O script `src/benchmark_pqc.py` mede 30 repetições e preserva os tempos brutos no JSON, além das medianas. ML-KEM-768 registra KeyGen, Encaps e Decaps separadamente; em todas as repetições, os segredos de encapsulamento e desencapsulamento coincidiram. X25519 registra a geração de um par de chaves e duas operações de exchange.
 
@@ -88,13 +88,13 @@ O script `src/benchmark_pqc.py` mede 30 repetições e preserva os tempos brutos
 
 O benchmark registra CPU e pico de memória agregados do processo e dos subprocessos OpenSSL. Nesta execução, o pico de RSS do processo foi 28.164 KiB; o consumo de CPU foi 0,070544 s de usuário e 0,016358 s de sistema no processo principal. Esses valores não são medidos por operação. Energia não foi medida. O resumo do ambiente está em `data/environment.txt`, e as amostras brutas em `data/benchmark_pqc.json`.
 
-## 6. Impactos e estratégia de migração
+## 7. Impactos e estratégia de migração
 
 A migração exige mais do que trocar uma primitiva. É necessário atualizar bibliotecas e versões de protocolos, negociar suporte ao KEM, adaptar formatos e tamanhos de chaves e ciphertexts, revisar buffers e limites de mensagens/MTU, atualizar armazenamento e rotação de chaves e testar interoperabilidade. Em dispositivos IoT, devem ser medidos consumo de memória, CPU, energia e latência no hardware-alvo.
 
 Uma implantação gradual pode considerar um modo híbrido, desde que utilize uma composição e um protocolo especificados e analisados. A troca de X25519 por ML-KEM não elimina a necessidade de autenticação e de assinaturas digitais resistentes a ataques quânticos quando aplicável.
 
-## 7. Respostas ao enunciado
+## 8. Respostas ao enunciado
 
 **Q1. Qual foi a maior instância comprometida experimentalmente?**  
 C32_F23: corpo F23, curva y²=x³+x+10 (mod 23), P=(5,5), Q=(8,22), ordem 32 e d=3 recuperado. O circuito usa 15 qubits lógicos e 8 ancillas limpas na síntese V-chain (23 qubits transpilados), com 1.024 shots, profundidade 322.591, 417.102 operações e 138.292 CX.
@@ -117,7 +117,7 @@ Atualizar bibliotecas, protocolos e negociação de algoritmos; adaptar formatos
 **Q7. Basta substituir o algoritmo?**  
 Não. A migração exige mudanças de protocolo e arquitetura, planejamento de provisionamento e armazenamento, tratamento de mensagens maiores, compatibilidade entre versões e avaliação de recursos dos dispositivos. Em alguns sistemas, pode ser necessária uma etapa híbrida durante a transição.
 
-## Conclusão
+## 9. Conclusão
 
 O circuito Qiskit/Aer recuperou d=3 nas quatro instâncias reduzidas de ECDLP, até a ordem 32. A síntese para a base {u, cx} permitiu medir profundidade, operações totais e portas CX. O experimento continua limitado por um oráculo de tabela clássica e por simulação ideal, não representando ataque a Curve25519 real. A comparação mostra aumento dos elementos de comunicação e armazenamento ao migrar para ML-KEM-768; os benchmarks funcionais, tempos brutos, CPU e pico de memória foram registrados com as ressalvas metodológicas descritas.
 
