@@ -47,7 +47,13 @@ O oráculo usa uma tabela clássica de pontos e não implementa aritmética reve
 
 A fatoração anterior de N=77, com a=30, valida parte do fluxo de Shor, mas não é um ataque ao X25519 e não é contabilizada como resultado ECDLP neste trabalho.
 
-## 3. Comparação com parâmetros reais\n\nO X25519 real opera sobre Curve25519, definida sobre um campo de 255 bits, e oferece aproximadamente 128 bits de segurança clássica. A maior instância deste experimento usa p=23 (5 bits) e ordem de subgrupo r=32 (5 bits). Portanto, o modelo reduzido é muito menor e serve para observar a estrutura matemática, não para estimar diretamente o custo de quebrar Curve25519.\n\nOs qubits lógicos representam os registradores do algoritmo reduzido. Os 23 qubits transpilados da maior instância incluem 8 ancillas para decompor o oráculo; não são uma estimativa de qubits físicos para um ataque real. Uma execução em escala real exigiria correção quântica de erros, muitos qubits físicos por qubit lógico, fidelidade alta de portas, controle de decoerência, conectividade adequada e circuitos aritméticos muito mais complexos.\n\n## 4. Alternativa pós-quântica: ML-KEM-768
+## 3. Comparação com parâmetros reais
+
+O X25519 real opera sobre Curve25519, definida sobre um campo de 255 bits, e oferece aproximadamente 128 bits de segurança clássica. A maior instância deste experimento usa p=23 (5 bits) e ordem de subgrupo r=32 (5 bits). Portanto, o modelo reduzido é muito menor e serve para observar a estrutura matemática, não para estimar diretamente o custo de quebrar Curve25519.
+
+Os qubits lógicos representam os registradores do algoritmo reduzido. Os 23 qubits transpilados da maior instância incluem 8 ancillas para decompor o oráculo; não são uma estimativa de qubits físicos para um ataque real. Uma execução em escala real exigiria correção quântica de erros, muitos qubits físicos por qubit lógico, fidelidade alta de portas, controle de decoerência, conectividade adequada e circuitos aritméticos muito mais complexos.
+
+## 4. Alternativa pós-quântica: ML-KEM-768
 
 ML-KEM-768 é um mecanismo de encapsulamento de chaves baseado em reticulados, padronizado pelo NIST no FIPS 203. Seu fluxo é:
 
@@ -68,7 +74,9 @@ A tabela utiliza tamanhos normativos dos elementos criptográficos, não arquivo
 | Mensagem considerada no estabelecimento | 32 B (chave pública) | 1.088 B (ciphertext) | +1.056 B (+3.300%) |
 | Segredo compartilhado | 32 B | 32 B | 0 B |
 
-**Armazenamento — 1.000.000 de chaves:** para chaves públicas, X25519 ocupa 32.000.000 B (32 MB) e ML-KEM-768 ocupa 1.184.000.000 B (1,184 GB), acréscimo de 1.152.000.000 B. Para chaves privadas brutas, os valores são 32.000.000 B e 2.400.000.000 B, acréscimo de 2.368.000.000 B. Os cálculos estão em `data/storage_scenario.csv`.\n\n**Comunicação — 1.000.000 de estabelecimentos:** considera-se uma chave pública X25519 de 32 B ou um ciphertext ML-KEM-768 de 1.088 B por estabelecimento. Os volumes são 32.000.000 B e 1.088.000.000 B, respectivamente, com acréscimo de 1.056.000.000 B (1,056 GB decimais).
+**Armazenamento — 1.000.000 de chaves:** para chaves públicas, X25519 ocupa 32.000.000 B (32 MB) e ML-KEM-768 ocupa 1.184.000.000 B (1,184 GB), acréscimo de 1.152.000.000 B. Para chaves privadas brutas, os valores são 32.000.000 B e 2.400.000.000 B, acréscimo de 2.368.000.000 B. Os cálculos estão em `data/storage_scenario.csv`.
+
+**Comunicação — 1.000.000 de estabelecimentos:** considera-se uma chave pública X25519 de 32 B ou um ciphertext ML-KEM-768 de 1.088 B por estabelecimento. Os volumes são 32.000.000 B e 1.088.000.000 B, respectivamente, com acréscimo de 1.056.000.000 B (1,056 GB decimais).
 
 O cenário considera somente esses elementos; não inclui cabeçalhos, certificados, retransmissões ou outras mensagens do protocolo. Os valores reproduzíveis estão em `data/communication_scenario.csv`.
 
@@ -109,7 +117,7 @@ Porque sua segurança está relacionada à dificuldade do ECDLP, para o qual Sho
 ML-KEM-768, padronizado no NIST FIPS 203, mantém a função de estabelecimento de segredo compartilhado por encapsulamento. A autenticação e as assinaturas precisam ser tratadas separadamente.
 
 **Q5. Qual é o custo quantitativo?**  
-A chave pública passa de 32 B para 1.184 B; a chave privada bruta, de 32 B para 2.400 B; e a mensagem considerada, de 32 B para 1.088 B. Em um milhão de estabelecimentos, o acréscimo de comunicação é 1.056.000.000 B. Os tempos medianos de KeyGen, Encaps e Decaps estão na seção 5. CPU e pico de memória são registrados de forma agregada; energia não foi medida.
+Para 1 milhão de chaves públicas, o acréscimo de armazenamento é 1,152 GB; para chaves privadas brutas, 2,368 GB. Em 1 milhão de estabelecimentos, o acréscimo de comunicação é 1,056 GB. Os tempos medianos de KeyGen, Encaps e Decaps estão na seção 6. CPU e pico de memória são registrados de forma agregada; energia não foi medida.
 
 **Q6. Quais alterações seriam necessárias em um sistema real?**  
 Atualizar bibliotecas, protocolos e negociação de algoritmos; adaptar formatos, buffers, armazenamento, rotação e limites de mensagens; planejar provisionamento e distribuição de chaves; e validar interoperabilidade e compatibilidade nos dispositivos.
