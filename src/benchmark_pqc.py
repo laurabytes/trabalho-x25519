@@ -3,6 +3,7 @@
 import argparse
 import json
 import platform
+import resource
 import shutil
 import statistics
 import subprocess
@@ -140,6 +141,20 @@ def main():
         result["ml_kem_768"] = benchmark_ml_kem(args.repetitions, openssl)
     except Exception as error:
         result["ml_kem_768"] = {"available": False, "reason": str(error)}
+
+    own_usage = resource.getrusage(resource.RUSAGE_SELF)
+    child_usage = resource.getrusage(resource.RUSAGE_CHILDREN)
+    result["resource_usage"] = {
+        "scope": "aggregate benchmark process and OpenSSL child processes",
+        "process_cpu_user_seconds": round(own_usage.ru_utime, 6),
+        "process_cpu_system_seconds": round(own_usage.ru_stime, 6),
+        "process_peak_rss": own_usage.ru_maxrss,
+        "children_cpu_user_seconds": round(child_usage.ru_utime, 6),
+        "children_cpu_system_seconds": round(child_usage.ru_stime, 6),
+        "children_peak_rss": child_usage.ru_maxrss,
+        "rss_unit": "bytes" if platform.system() == "Darwin" else "KiB",
+        "note": "RSS is the process peak, not a per-operation measurement; child values cover OpenSSL subprocesses cumulatively.",
+    }
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
