@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""simulação ideal de ecdlp reduzido pela estrutura de subgrupo oculto de shor.
-
-o estado é calculado exatamente em numpy. não é um circuito compilado em
-portas nativas, não usa aer/fakeprovider e não representa curve25519 real.
-"""
+"""simulação ideal de instâncias pequenas de ecdlp com numpy."""
 import argparse
 import csv
 import json
@@ -87,8 +83,7 @@ def run_case(case, secret, shots, seed):
     if len(labels) != r:
         raise ValueError("O ponto base não gera um subgrupo de ordem r.")
 
-    # Cada bloco representa um valor do registrador de pontos após o oráculo.
-    # O oráculo calcula f(u,v)=[u]P+[v]Q usando operações reais na curva.
+    # Cada fatia corresponde a um resultado possível do registrador de pontos.
     amplitudes = np.zeros((r, r, r), dtype=np.complex128)
     for u in range(r):
         uP = point_mul(u, P, a, p)
@@ -97,8 +92,7 @@ def run_case(case, secret, shots, seed):
             point = point_add(uP, vQ, a, p)
             amplitudes[labels[point], u, v] = 1 / r
 
-    # Descartar o registrador de pontos equivale a somar probabilidades
-    # dos resultados de Fourier condicionados a cada valor do ponto.
+    # Soma as distribuições condicionadas aos estados do registrador de pontos.
     fourier = qft_matrix(r)
     probabilities = np.zeros((r, r), dtype=float)
     for point_state in range(r):
@@ -107,7 +101,6 @@ def run_case(case, secret, shots, seed):
     probabilities /= probabilities.sum()
 
     rng = np.random.default_rng(seed)
-    # A medição é amostrada da distribuição completa, sem impor os picos.
     samples = rng.multinomial(shots, probabilities.ravel()).reshape((r, r))
     recovered = []
     informative = 0
