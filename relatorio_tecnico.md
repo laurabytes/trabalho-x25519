@@ -28,11 +28,13 @@ O problema matemático subjacente à segurança de sistemas de curva elíptica p
 
 O algoritmo de Shor resolve problemas de fatoração e logaritmo discreto em tempo polinomial no modelo de computador quântico tolerante a falhas. Portanto, um computador quântico suficientemente grande ameaça mecanismos ECC, incluindo X25519. Isso não significa que o hardware quântico atual consiga quebrar uma sessão X25519 real.
 
-## 3. Experimento reduzido de ECDLP e limites
+## 3. Experimento reduzido de ECDLP
 
-O diretório `src/toy_ecdlog.py` fornece um experimento reproduzível em uma curva elíptica pequena sobre um corpo primo. Ele constrói pontos, calcula a ordem do ponto base, gera `Q=dP` e registra uma amostragem idealizada de picos de Fourier com pós-processamento para validar o escalar em uma instância minúscula.
+O script `src/ecdlog_shor.py` implementa a estrutura de subgrupo oculto para quatro curvas curtas de Weierstrass sobre corpos primos pequenos, com ordens 4, 8, 16 e 32. Para cada caso, calcula `P`, `Q=3P` e a função `f(u,v)=[u]P+[v]Q` usando operações reais de pontos da curva. O oráculo associa cada resultado a um estado do registrador de pontos. Em seguida, o registrador de pontos é descartado por soma das probabilidades, aplica-se a QFT exata nos dois registradores de expoentes e amostram-se pares `(k_u,k_v)`. Quando `k_u` é invertível módulo `r`, recupera-se `d=k_v*k_u^{-1} mod r`.
 
-**Limitação essencial:** essa implementação não é um circuito quântico reversível completo de Shor. A amostragem é idealizada e a validação do escalar usa busca clássica exaustiva no pequeno subgrupo. Não utiliza Qiskit/Aer/FakeProvider e não recupera uma chave X25519 real. Assim, seus resultados devem ser apresentados como demonstração didática da estrutura de ECDLP e do modelo de amostragem, não como execução física de Shor.
+A execução reproduzível padrão usa 4.096 shots e semente 20261110. As quatro instâncias recuperam `d=3`; a maior, C32_F23, usa 15 qubits lógicos no modelo de três registradores. A fração de pares que satisfaz a relação de período é 1 no modelo ideal. A fração de amostras informativas aproxima `phi(r)/r=0,5` para ordens potências de dois.
+
+**Limitação essencial:** trata-se de simulação ideal de estado vetorial em NumPy, com oráculo por tabela de pontos e QFT aplicada como matriz exata. Não é um circuito nativo transpilado em Qiskit/Aer/FakeProvider, não modela ruído ou conectividade e não recupera uma chave Curve25519 real. As métricas de qubits são do modelo lógico reduzido; não representam recursos de hardware.
 
 Em experimentos anteriores do ambiente, foi testada separadamente a fatoração de `N=77`, com base `a=30`. A execução ideal com 1.024 shots encontrou período `r=30` e fatores `7` e `11`; uma execução com 8 shots não recuperou o resultado. Esses resultados validam apenas parte do fluxo de fatoração e **não** são uma instância de ECDLP nem um ataque a X25519.
 
@@ -96,7 +98,7 @@ O ciphertext ML-KEM-768 possui 1.088 bytes. No cenário de um milhão de sessõe
 
 ### 7.3 Processamento
 
-O processamento deve ser comparado por operação: KeyGen, Encaps e Decaps. O benchmark fornecido mede X25519 em Python e verifica se a instalação OpenSSL local anuncia ML-KEM-768. Como as interfaces CLI de ML-KEM variam entre builds, o script não inventa medições quando não encontra um fluxo de execução compatível. Uma medição final deve usar API EVP do OpenSSL ou liboqs e registrar separadamente cada operação, repetindo o ensaio e reportando mediana e dispersão.
+O processamento deve ser comparado por operação: KeyGen, Encaps e Decaps. O benchmark fornecido mede X25519 em Python e verifica se a instalação OpenSSL local anuncia ML-KEM-768. O script executa KeyGen, Encaps e Decaps via OpenSSL CLI quando o build oferece ML-KEM-768. Em cada repetição, compara os segredos encapsulado e desencapsulado byte a byte. Os tempos incluem overhead de subprocesso e I/O e são específicos do ambiente.
 
 Tempos de CLI ou Python incluem overhead de inicialização e wrappers; não devem ser tratados como benchmark puro sem qualificação. Para IoT, também é importante medir pico de RAM, CPU, energia e latência de comunicação.
 
@@ -140,7 +142,7 @@ Não. A mudança afeta formatos, tamanhos de mensagens, buffers, protocolos, des
 
 ## 10. Conclusão
 
-X25519 é vulnerável em princípio a um computador quântico tolerante a falhas que execute Shor em escala suficiente, pois depende do ECDLP. O experimento toy incluído ajuda a estudar a estrutura de uma instância pequena, mas não equivale a um circuito completo de Shor nem à quebra de Curve25519. A migração para ML-KEM-768 mantém a função de estabelecimento de chaves e oferece uma alternativa padronizada, mas aumenta significativamente os tamanhos de chaves e mensagens. A adoção exige mudanças de software, protocolo e arquitetura, além de medições locais de desempenho e recursos.
+X25519 é vulnerável em princípio a um computador quântico tolerante a falhas que execute Shor em escala suficiente, pois depende do ECDLP. O experimento de estado vetorial incluído recupera o escalar de teste em quatro instâncias pequenas, mas não equivale a uma execução nativa de circuito Shor nem à quebra de Curve25519. A migração para ML-KEM-768 mantém a função de estabelecimento de chaves e oferece uma alternativa padronizada, mas aumenta significativamente os tamanhos de chaves e mensagens. A adoção exige mudanças de software, protocolo e arquitetura, além de medições locais de desempenho e recursos.
 
 ## Referências
 
