@@ -56,7 +56,7 @@ plt.ylabel("GB para 1.000.000 de sessões (decimal)")
 plt.title("Comparação ilustrativa do volume de comunicação")
 plt.xticks(rotation=8, ha="right")
 plt.tight_layout()
-plt.savefig(figures_dir / "communication_1m.png", dpi=180)
+plt.savefig(figures_dir / "communication_1m.svg", format="svg", bbox_inches="tight")
 
 print(f"X25519: {x25519_bytes:,} bytes")
 print(f"ML-KEM-768: {ml_kem_bytes:,} bytes")
