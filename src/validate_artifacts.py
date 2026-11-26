@@ -69,7 +69,9 @@ def main():
         assert item["transpiled_depth"] > 0
         assert item["transpiled_total_operations"] > 0
         assert item["transpiled_two_qubit_operations"] > 0
-        assert item["period_relation_fraction"] > 0.4
+        assert item["period_relation_fraction"] == 1.0
+        assert item["probability_correct_single_shot"] > 0.4
+        assert item["total_experiment_seconds"] > 0
         print(
             f"{name}: Qiskit/Aer recuperou d={item['recovered_d']}; "
             f"depth={item['transpiled_depth']}; "
@@ -99,6 +101,13 @@ def main():
     assert int(communication["ml_kem_768_bytes"]) == 1_088_000_000
     assert int(communication["additional_bytes"]) == 1_056_000_000
     print("Cenário de comunicação 1 milhão: acréscimo de 1.056.000.000 bytes conferido.")
+
+    with (ROOT / "data/storage_scenario.csv").open(newline="") as stream:
+        storage_rows = list(csv.DictReader(stream))
+    storage = {row["element"]: row for row in storage_rows}
+    assert int(storage["public_keys"]["additional_bytes"]) == 1_152_000_000
+    assert int(storage["private_keys_raw"]["additional_bytes"]) == 2_368_000_000
+    print("Cenário de armazenamento para 1 milhão de chaves públicas/privadas conferido.")
 
     print("Validação estrutural completa concluída.")
 
