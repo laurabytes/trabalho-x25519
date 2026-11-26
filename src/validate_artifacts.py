@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""valida a estrutura dos resultados ecdlp e dos arquivos csv."""
+"""confere os resultados e os arquivos gerados."""
 import csv
 import json
 from pathlib import Path
@@ -49,7 +49,7 @@ def main():
             f"{item['logical_qubits']} qubits abstratos"
         )
 
-    # Validação do experimento em circuito Qiskit/Aer, gerado no mesmo workflow.
+    # Resultados do circuito Qiskit/Aer.
     qiskit_results = json.loads(qiskit_results_path.read_text())
     qiskit_by_case = {item["name"]: item for item in qiskit_results}
     assert len(qiskit_by_case) == 4, "Esperadas quatro instâncias Qiskit/Aer."
@@ -78,7 +78,7 @@ def main():
             f"2Q={item['transpiled_two_qubit_operations']}"
         )
 
-    # Benchmark PQC: amostras brutas por operação, segredos coincidentes e recursos.
+    # Resultados do benchmark.
     benchmark = json.loads((ROOT / "data/benchmark_pqc.json").read_text())
     x_result = benchmark["x25519"]
     assert x_result["available"]
@@ -92,8 +92,7 @@ def main():
     assert "resource_usage" in benchmark
     print("Benchmark X25519/ML-KEM: amostras brutas, igualdade de segredos e recursos conferidos.")
 
-    # Cenário quantitativo definido no enunciado: uma chave pública X25519 (32 B)
-    # versus um ciphertext ML-KEM-768 (1.088 B) por estabelecimento.
+    # Cenário de comunicação: chave pública X25519 e ciphertext ML-KEM-768.
     with (ROOT / "data/communication_scenario.csv").open(newline="") as stream:
         communication = next(csv.DictReader(stream))
     assert int(communication["sessions"]) == 1_000_000
