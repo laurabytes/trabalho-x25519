@@ -25,6 +25,7 @@
     "success": true,
     "informative_shots": 496,
     "informative_fraction": 0.484375,
+    "probability_correct_single_shot": 0.484375,
     "period_relation_fraction": 1.0,
     "measurement_counts": [
       {
@@ -57,9 +58,10 @@
       "cx": 298,
       "measure": 4
     },
-    "transpile_seconds": 0.020942476999998405,
-    "simulation_transpile_seconds": 0.05109369899999905,
-    "simulation_seconds": 0.003848524000005682,
+    "circuit_build_seconds": 0.004662881000001562,
+    "transpile_seconds": 0.02011822400000085,
+    "simulation_transpile_seconds": 0.05134388700000159,
+    "simulation_seconds": 0.003981458000005489,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -75,7 +77,8 @@
       "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
-    ]
+    ],
+    "total_experiment_seconds": 0.08634073599999681
   },
   {
     "name": "C8_F5",
@@ -103,6 +106,7 @@
     "success": true,
     "informative_shots": 507,
     "informative_fraction": 0.4951171875,
+    "probability_correct_single_shot": 0.4951171875,
     "period_relation_fraction": 1.0,
     "measurement_counts": [
       {
@@ -155,9 +159,10 @@
       "cx": 2898,
       "measure": 6
     },
-    "transpile_seconds": 0.03623557400000266,
-    "simulation_transpile_seconds": 0.05156866499999779,
-    "simulation_seconds": 0.005927397999997197,
+    "circuit_build_seconds": 0.020131633999994847,
+    "transpile_seconds": 0.03666666099999816,
+    "simulation_transpile_seconds": 0.05179047100000389,
+    "simulation_seconds": 0.006153165999997157,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -173,7 +178,8 @@
       "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
-    ]
+    ],
+    "total_experiment_seconds": 0.15590118999999447
   },
   {
     "name": "C16_F11",
@@ -201,6 +207,7 @@
     "success": true,
     "informative_shots": 512,
     "informative_fraction": 0.5,
+    "probability_correct_single_shot": 0.5,
     "period_relation_fraction": 1.0,
     "measurement_counts": [
       {
@@ -293,9 +300,10 @@
       "cx": 21540,
       "measure": 8
     },
-    "transpile_seconds": 0.25531865600000003,
-    "simulation_transpile_seconds": 0.0639272900000023,
-    "simulation_seconds": 0.021007634000000053,
+    "circuit_build_seconds": 0.10254368000000369,
+    "transpile_seconds": 0.2650057820000029,
+    "simulation_transpile_seconds": 0.06432140700000133,
+    "simulation_seconds": 0.020946760000001063,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -311,7 +319,8 @@
       "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
-    ]
+    ],
+    "total_experiment_seconds": 0.7394029310000008
   },
   {
     "name": "C32_F23",
@@ -339,6 +348,7 @@
     "success": true,
     "informative_shots": 537,
     "informative_fraction": 0.5244140625,
+    "probability_correct_single_shot": 0.5244140625,
     "period_relation_fraction": 1.0,
     "measurement_counts": [
       {
@@ -511,9 +521,10 @@
       "cx": 138292,
       "measure": 10
     },
-    "transpile_seconds": 1.685942223000005,
-    "simulation_transpile_seconds": 0.1301483740000009,
-    "simulation_seconds": 0.17961152599999508,
+    "circuit_build_seconds": 0.5103774490000035,
+    "transpile_seconds": 1.7007383890000014,
+    "simulation_transpile_seconds": 0.1358685110000053,
+    "simulation_seconds": 0.16436580799999945,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -529,6 +540,7 @@
       "Oráculo reversível construído por tabela clássica; não é aritmética de curva escalável.",
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
-    ]
+    ],
+    "total_experiment_seconds": 4.357178464999997
   }
 ]

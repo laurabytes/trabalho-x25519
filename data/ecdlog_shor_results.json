@@ -49,7 +49,7 @@
         "count": 987
       }
     ],
-    "simulation_seconds": 0.011547743999997806,
+    "simulation_seconds": 0.011146947999996826,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
@@ -129,7 +129,7 @@
         "count": 527
       }
     ],
-    "simulation_seconds": 0.0005426970000002029,
+    "simulation_seconds": 0.0005345750000032012,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
@@ -249,7 +249,7 @@
         "count": 233
       }
     ],
-    "simulation_seconds": 0.0013047109999959616,
+    "simulation_seconds": 0.00128480000000053,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
@@ -449,7 +449,7 @@
         "count": 138
       }
     ],
-    "simulation_seconds": 0.005999113000001444,
+    "simulation_seconds": 0.005931747000005316,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
