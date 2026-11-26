@@ -138,7 +138,7 @@ def build_ecdlog_circuit(case, secret, use_ancillas=False):
 
 
 def decode_counts(counts, n, secret, order):
-    samples, informative, candidates, relation = [], 0, {}, 0
+    samples, informative, candidates, relation, correct_candidates = [], 0, {}, 0
     for bitstring, count in counts.items():
         # Uma única ClassicalRegister: Qiskit imprime m[2n-1] ... m[0].
         bits = bitstring.replace(" ", "")
@@ -151,16 +151,21 @@ def decode_counts(counts, n, secret, order):
             informative += int(count)
             candidate = (kv * pow(ku, -1, order)) % order
             candidates[candidate] = candidates.get(candidate, 0) + int(count)
+            if candidate == secret:
+                correct_candidates += int(count)
     recovered = max(candidates, key=candidates.get) if candidates else None
     total = sum(int(value) for value in counts.values())
-    return recovered, samples, informative, relation, total
+    return recovered, samples, informative, relation, correct_candidates, total
 
 
 def run_case(case, secret, shots, seed, optimization_level=1):
     # Circuito com ancillas limpas para extrair contagem real de CX após
     # decomposição em base {u, cx}; circuito compacto equivalente para Aer.
+    total_start = time.perf_counter()
+    build_start = time.perf_counter()
     metric_circuit, metadata = build_ecdlog_circuit(case, secret, use_ancillas=True)
     simulation_circuit, _ = build_ecdlog_circuit(case, secret, use_ancillas=False)
+    circuit_build_seconds = time.perf_counter() - build_start
     backend = AerSimulator()
 
     start = time.perf_counter()
@@ -184,7 +189,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
     simulation_seconds = time.perf_counter() - start
     counts = result.get_counts(compiled_simulation)
     n = metadata["phase_qubits_each"]
-    recovered, samples, informative, relation, total = decode_counts(
+    recovered, samples, informative, relation, correct_candidates, total = decode_counts(
         counts, n, metadata["secret_d"], metadata["order"]
     )
     ops = compiled_metrics.count_ops()
@@ -194,6 +199,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         "success": recovered == metadata["secret_d"],
         "informative_shots": informative,
         "informative_fraction": informative / total if total else 0.0,
+        "probability_correct_single_shot": correct_candidates / total if total else 0.0,
         "period_relation_fraction": relation / total if total else 0.0,
         "measurement_counts": samples,
         "transpiled_depth": compiled_metrics.depth(),
@@ -201,6 +207,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         "transpiled_total_operations": compiled_metrics.size(),
         "transpiled_two_qubit_operations": two_qubit,
         "transpiled_operation_counts": {str(k): int(v) for k, v in ops.items()},
+        "circuit_build_seconds": circuit_build_seconds,
         "transpile_seconds": transpile_seconds,
         "simulation_transpile_seconds": simulation_transpile_seconds,
         "simulation_seconds": simulation_seconds,
