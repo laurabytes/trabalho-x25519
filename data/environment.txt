@@ -5,17 +5,17 @@ OpenSSL: OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)
 Qiskit: 1.4.6
 Qiskit Aer: 0.17.2
 Repetições: 30
-X25519 KeyGen par (mediana ms): 0.063249
-X25519 duas operações exchange (mediana ms): 0.063679
-ML-KEM-768 KeyGen + exportação (mediana ms): 6.968748
-ML-KEM-768 Encaps (mediana ms): 3.388151
-ML-KEM-768 Decaps (mediana ms): 3.072942
-CPU user do processo (s): 0.070544
-CPU system do processo (s): 0.016358
-Pico RSS do processo: 28164 KiB
-CPU user dos subprocessos (s): 0.227444
-CPU system dos subprocessos (s): 0.168756
-Pico RSS dos subprocessos: 28164 KiB
+X25519 KeyGen par (mediana ms): 0.063074
+X25519 duas operações exchange (mediana ms): 0.063745
+ML-KEM-768 KeyGen + exportação (mediana ms): 7.128614
+ML-KEM-768 Encaps (mediana ms): 3.521202
+ML-KEM-768 Decaps (mediana ms): 3.147236
+CPU user do processo (s): 0.064887
+CPU system do processo (s): 0.021995
+Pico RSS do processo: 27940 KiB
+CPU user dos subprocessos (s): 0.236541
+CPU system dos subprocessos (s): 0.173233
+Pico RSS dos subprocessos: 27940 KiB
 Segredos compartilhados coincidiram nas execuções disponíveis.
 Tempos incluem overhead de interfaces diferentes e não são comparação intrínseca das primitivas.
 RSS é pico agregado, não medição por operação; energia não foi medida.
