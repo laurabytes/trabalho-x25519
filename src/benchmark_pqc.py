@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""benchmark de x25519 e ml-kem-768 usando implementações criptográficas locais."""
+"""benchmark local de x25519 e ml-kem-768."""
 import argparse
 import json
 import platform
-import resource
+try:
+    import resource
+except ImportError:
+    resource = None
 import shutil
 import statistics
 import subprocess
@@ -142,19 +145,26 @@ def main():
     except Exception as error:
         result["ml_kem_768"] = {"available": False, "reason": str(error)}
 
-    own_usage = resource.getrusage(resource.RUSAGE_SELF)
-    child_usage = resource.getrusage(resource.RUSAGE_CHILDREN)
-    result["resource_usage"] = {
-        "scope": "aggregate benchmark process and OpenSSL child processes",
-        "process_cpu_user_seconds": round(own_usage.ru_utime, 6),
-        "process_cpu_system_seconds": round(own_usage.ru_stime, 6),
-        "process_peak_rss": own_usage.ru_maxrss,
-        "children_cpu_user_seconds": round(child_usage.ru_utime, 6),
-        "children_cpu_system_seconds": round(child_usage.ru_stime, 6),
-        "children_peak_rss": child_usage.ru_maxrss,
-        "rss_unit": "bytes" if platform.system() == "Darwin" else "KiB",
-        "note": "RSS is the process peak, not a per-operation measurement; child values cover OpenSSL subprocesses cumulatively.",
-    }
+    if resource is None:
+        result["resource_usage"] = {
+            "available": False,
+            "note": "Métricas de CPU e RSS indisponíveis nesta plataforma.",
+        }
+    else:
+        own_usage = resource.getrusage(resource.RUSAGE_SELF)
+        child_usage = resource.getrusage(resource.RUSAGE_CHILDREN)
+        result["resource_usage"] = {
+            "available": True,
+            "scope": "aggregate benchmark process and OpenSSL child processes",
+            "process_cpu_user_seconds": round(own_usage.ru_utime, 6),
+            "process_cpu_system_seconds": round(own_usage.ru_stime, 6),
+            "process_peak_rss": own_usage.ru_maxrss,
+            "children_cpu_user_seconds": round(child_usage.ru_utime, 6),
+            "children_cpu_system_seconds": round(child_usage.ru_stime, 6),
+            "children_peak_rss": child_usage.ru_maxrss,
+            "rss_unit": "bytes" if platform.system() == "Darwin" else "KiB",
+            "note": "RSS é pico agregado, não medição por operação.",
+        }
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
