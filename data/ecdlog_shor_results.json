@@ -1,0 +1,6 @@
+[
+  {"name":"C4_F5","p":5,"a":1,"b":2,"P":[1,2],"Q":[1,3],"order":4,"secret_d":3,"recovered_d":3,"success":true,"logical_qubits":6,"shots":4096,"informative_fraction":0.491455078125,"period_relation_fraction":1.0},
+  {"name":"C8_F5","p":5,"a":4,"b":1,"P":[0,1],"Q":[1,4],"order":8,"secret_d":3,"recovered_d":3,"success":true,"logical_qubits":9,"shots":4096,"informative_fraction":0.5048828125,"period_relation_fraction":1.0},
+  {"name":"C16_F11","p":11,"a":2,"b":1,"P":[0,1],"Q":[8,1],"order":16,"secret_d":3,"recovered_d":3,"success":true,"logical_qubits":12,"shots":4096,"informative_fraction":0.498046875,"period_relation_fraction":1.0},
+  {"name":"C32_F23","p":23,"a":1,"b":10,"P":[5,5],"Q":[8,22],"order":32,"secret_d":3,"recovered_d":3,"success":true,"logical_qubits":15,"shots":4096,"informative_fraction":0.501708984375,"period_relation_fraction":1.0}
+]
