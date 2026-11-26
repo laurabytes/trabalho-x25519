@@ -22,6 +22,7 @@ pip install -r requirements.txt
 Na raiz do repositório:
 
 ```bash
+python src/ecdlog_qiskit.py --shots 4096 --secret 3 --seed 20261126
 python src/ecdlog_shor.py --shots 4096 --secret 3 --seed 20261110
 python src/benchmark_pqc.py --repetitions 30
 python src/benchmark_sizes.py
@@ -29,11 +30,11 @@ python src/validate_artifacts.py
 python -m unittest discover -s tests -v
 ```
 
-O primeiro comando gera os resultados agregados e a distribuição de medições em `data/`. O segundo executa X25519 e ML-KEM-768 e verifica se os dois lados obtêm o mesmo segredo. O terceiro atualiza as tabelas e gráficos de tamanhos/comunicação. O quarto verifica a consistência dos arquivos gerados.
+O primeiro comando constrói, transpila e executa o circuito ECDLP em Qiskit/Aer, registrando distribuição de medições, profundidade, operações totais, portas de dois qubits e tempos. O segundo é uma simulação NumPy de referência para comparação matemática. Os comandos seguintes executam o benchmark PQC, atualizam tabelas/gráficos e validam os dados. O workflow reproduz também o circuito Qiskit/Aer e executa os testes.
 
 ## Estrutura
 
-- `src/`: simulação ECDLP, benchmark PQC, comparação de tamanhos e validação.
+- `src/`: circuito ECDLP em Qiskit/Aer, simulação NumPy de referência, benchmark PQC, comparação de tamanhos e validação.
 - `tests/`: testes automatizados.
 - `data/`: dados em JSON e CSV.
 - `figures/`: gráficos SVG.
@@ -43,7 +44,7 @@ O primeiro comando gera os resultados agregados e a distribuição de medições
 
 ## Escopo e limitações
 
-O experimento ECDLP é uma simulação ideal em NumPy: usa operações de pontos em curvas pequenas, um oráculo clássico por tabela e QFT exata por matriz. **Não implementa um circuito quântico de portas, não é transpilado no Qiskit/Aer e não fornece profundidade nem contagem de gates.** Os qubits informados são a contagem lógica dos registradores abstratos do modelo.
+O experimento principal `src/ecdlog_qiskit.py` constrói um circuito quântico reversível para ECDLP em curvas pequenas, com oráculo de consulta por tabela implementado por portas multi-controladas, QFT inversa, transpilation e execução no AerSimulator. Registra métricas reais do circuito transpilado e distribuição de medições. O oráculo usa uma tabela clássica, portanto é uma implementação didática reduzida, não aritmética de curva escalável. Aer é simulação ideal, sem ruído nem execução em QPU. `src/ecdlog_shor.py` permanece como modelo NumPy independente para comparação.
 
 A simulação demonstra a relação matemática em instâncias reduzidas; não quebra Curve25519 nem chaves X25519 reais. Os tempos de X25519 e ML-KEM-768 usam interfaces diferentes (biblioteca Python e CLI OpenSSL), portanto incluem overheads distintos e não devem ser interpretados como comparação isolada da velocidade das primitivas.
 
