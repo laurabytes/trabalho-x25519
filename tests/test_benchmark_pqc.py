@@ -13,17 +13,14 @@ class PQCBenchmarkTests(unittest.TestCase):
         self.assertEqual(len(result["raw_measurements_ms"]["keygen_pair"]), 2)
         self.assertEqual(len(result["raw_measurements_ms"]["two_exchanges"]), 2)
 
-    def test_ml_kem_round_trip_when_supported(self):
+    def test_ml_kem_round_trip(self):
         openssl = shutil.which("openssl")
         if not openssl:
             self.skipTest("openssl não está instalado")
-        version = run([openssl, "version"]).stdout
-        if "3.5" not in version:
-            self.skipTest("openssl sem suporte esperado a ml-kem-768")
-        try:
-            result = benchmark_ml_kem(1, openssl)
-        except RuntimeError as error:
-            self.skipTest(f"ml-kem-768 indisponível: {error}")
+        algorithms = run([openssl, "list", "-kem-algorithms"]).stdout.lower()
+        if "ml-kem-768" not in algorithms:
+            self.skipTest("esta instalação do openssl não oferece ml-kem-768")
+        result = benchmark_ml_kem(1, openssl)
         self.assertTrue(result["secret_match"])
         self.assertEqual(result["ciphertext_bytes"], 1088)
         self.assertEqual(result["shared_secret_bytes"], 32)
