@@ -1,5 +1,5 @@
 Elemento,X25519_bytes,ML-KEM-768_bytes
 Chave pública,32,1184
 Chave privada,32,2400
-Ciphertext/valor público efêmero,32,1088
+Mensagem de troca (duas shares públicas / ciphertext),64,1088
 Segredo compartilhado,32,32
