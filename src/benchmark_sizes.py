@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
-"""Gera comparação de tamanhos e cenário de comunicação X25519 x ML-KEM-768."""
+"""Gera tabelas e gráficos de tamanhos, comunicação e recursos ECDLP."""
 import csv
+import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 
+ROOT = Path(__file__).resolve().parents[1]
+data_dir = ROOT / "data"
+figures_dir = ROOT / "figures"
+data_dir.mkdir(exist_ok=True)
+figures_dir.mkdir(exist_ok=True)
 
 rows = [
     ["Chave pública", "X25519", 32, "ML-KEM-768", 1184],
@@ -12,11 +18,6 @@ rows = [
     ["Mensagem de troca", "X25519 (duas shares públicas)", 64, "ML-KEM-768 (ciphertext)", 1088],
     ["Segredo compartilhado", "X25519", 32, "ML-KEM-768", 32],
 ]
-
-data_dir = Path("data")
-figures_dir = Path("figures")
-data_dir.mkdir(exist_ok=True)
-figures_dir.mkdir(exist_ok=True)
 
 with (data_dir / "size_comparison.csv").open("w", newline="") as file:
     writer = csv.writer(file)
@@ -32,20 +33,13 @@ with (data_dir / "size_comparison.csv").open("w", newline="") as file:
             difference, round(increase, 2),
         ])
 
-# Uma chave pública ML-KEM provisionada uma vez e reutilizada no cenário.
 sessions = 1_000_000
 x25519_bytes = 64 * sessions
 ml_kem_bytes = 1088 * sessions + 1184
 with (data_dir / "communication_scenario.csv").open("w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow([
-        "sessions", "x25519_bytes", "ml_kem_768_bytes",
-        "additional_bytes",
-    ])
-    writer.writerow([
-        sessions, x25519_bytes, ml_kem_bytes,
-        ml_kem_bytes - x25519_bytes,
-    ])
+    writer.writerow(["sessions", "x25519_bytes", "ml_kem_768_bytes", "additional_bytes"])
+    writer.writerow([sessions, x25519_bytes, ml_kem_bytes, ml_kem_bytes - x25519_bytes])
 
 plt.figure(figsize=(8, 5))
 plt.bar(
@@ -53,11 +47,44 @@ plt.bar(
     [x25519_bytes / 1e9, ml_kem_bytes / 1e9],
 )
 plt.ylabel("GB para 1.000.000 de sessões (decimal)")
-plt.title("Comparação ilustrativa do volume de comunicação")
+plt.title("Volume de comunicação — cenário ilustrativo")
 plt.xticks(rotation=8, ha="right")
 plt.tight_layout()
 plt.savefig(figures_dir / "communication_1m.svg", format="svg", bbox_inches="tight")
+plt.close()
+
+labels = [row[0] for row in rows]
+classic = [row[2] for row in rows]
+pqc = [row[4] for row in rows]
+positions = list(range(len(labels)))
+width = 0.36
+plt.figure(figsize=(9, 5))
+plt.bar([p - width / 2 for p in positions], classic, width, label="X25519")
+plt.bar([p + width / 2 for p in positions], pqc, width, label="ML-KEM-768")
+plt.xticks(positions, labels, rotation=12, ha="right")
+plt.ylabel("Bytes")
+plt.title("Tamanho dos elementos criptográficos")
+plt.legend()
+plt.tight_layout()
+plt.savefig(figures_dir / "size_comparison.svg", format="svg", bbox_inches="tight")
+plt.close()
+
+results_path = data_dir / "ecdlog_shor_results.json"
+if results_path.exists():
+    results = json.loads(results_path.read_text())
+    labels = [item["name"] for item in results]
+    qubits = [item["logical_qubits"] for item in results]
+    plt.figure(figsize=(8, 5))
+    plt.plot(labels, qubits, marker="o")
+    plt.xlabel("Instância")
+    plt.ylabel("Qubits lógicos abstratos")
+    plt.title("Registradores do modelo ECDLP reduzido")
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(figures_dir / "ecdlog_qubits.svg", format="svg", bbox_inches="tight")
+    plt.close()
 
 print(f"X25519: {x25519_bytes:,} bytes")
 print(f"ML-KEM-768: {ml_kem_bytes:,} bytes")
 print(f"Adicional: {ml_kem_bytes - x25519_bytes:,} bytes")
+print("Tabelas e gráficos atualizados.")
