@@ -98,7 +98,7 @@ if qiskit_results_path.exists():
     metric_fields = [
         "name", "order", "secret_d", "recovered_d", "success", "shots",
         "logical_qubits", "transpiled_qubits", "transpiled_depth", "transpiled_total_operations",
-        "transpiled_two_qubit_operations", "transpile_seconds", "simulation_transpile_seconds", "simulation_seconds",
+        "transpiled_two_qubit_operations", "transpile_seconds", "simulation_seconds",
         "informative_fraction", "probability_correct_single_shot", "period_relation_fraction",
         "circuit_build_seconds", "simulation_transpile_seconds", "total_experiment_seconds",
     ]
