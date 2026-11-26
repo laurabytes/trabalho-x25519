@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""circuito qiskit/aer para ecdlp reduzido com oráculo reversível por tabela."""
+"""circuito qiskit/aer para instâncias pequenas de ecdlp."""
 import argparse
 import csv
 import json
@@ -92,8 +92,7 @@ def build_ecdlog_circuit(case, secret, use_ancillas=False):
     qc.h(u)
     qc.h(v)
 
-    # Oráculo reversível: |u,v,z> -> |u,v,z XOR label([u]P+[v]Q)>.
-    # A tabela é clássica; sua consulta é implementada por portas multi-controladas.
+    # f(u,v) = [u]P + [v]Q, codificada em uma tabela reversível.
     subgroup = [point_mul(k, P, a, p) for k in range(r)]
     labels = {value: index for index, value in enumerate(subgroup)}
     if len(labels) != r:
@@ -140,7 +139,7 @@ def build_ecdlog_circuit(case, secret, use_ancillas=False):
 def decode_counts(counts, n, secret, order):
     samples, informative, candidates, relation, correct_candidates = [], 0, {}, 0, 0
     for bitstring, count in counts.items():
-        # Uma única ClassicalRegister: Qiskit imprime m[2n-1] ... m[0].
+        # Qiskit imprime os bits do registrador em ordem inversa.
         bits = bitstring.replace(" ", "")
         ku = int(bits[-n:], 2)
         kv = int(bits[:n], 2)
@@ -159,8 +158,7 @@ def decode_counts(counts, n, secret, order):
 
 
 def run_case(case, secret, shots, seed, optimization_level=1):
-    # Circuito com ancillas limpas para extrair contagem real de CX após
-    # decomposição em base {u, cx}; circuito compacto equivalente para Aer.
+    # A cópia com ancillas é usada nas métricas; a compacta roda no Aer.
     total_start = time.perf_counter()
     build_start = time.perf_counter()
     metric_circuit, metadata = build_ecdlog_circuit(case, secret, use_ancillas=True)
@@ -227,6 +225,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
     })
     metadata["total_experiment_seconds"] = time.perf_counter() - total_start
     return metadata
+
 
 def main():
     parser = argparse.ArgumentParser(description="ECDLP reduzido em circuito Qiskit/Aer.")
