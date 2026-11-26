@@ -58,10 +58,10 @@
       "cx": 298,
       "measure": 4
     },
-    "circuit_build_seconds": 0.004577463000003945,
-    "transpile_seconds": 0.02153322899999921,
-    "simulation_transpile_seconds": 0.05059859100000352,
-    "simulation_seconds": 0.0027154120000005832,
+    "circuit_build_seconds": 0.004559217000000615,
+    "transpile_seconds": 0.015508171000000459,
+    "simulation_transpile_seconds": 0.04937954799999744,
+    "simulation_seconds": 0.002770124000001317,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -78,7 +78,7 @@
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
     ],
-    "total_experiment_seconds": 0.08565141800000475
+    "total_experiment_seconds": 0.07842404399999481
   },
   {
     "name": "C8_F5",
@@ -159,10 +159,10 @@
       "cx": 2898,
       "measure": 6
     },
-    "circuit_build_seconds": 0.02049014600000021,
-    "transpile_seconds": 0.038808357000000626,
-    "simulation_transpile_seconds": 0.05126424599999524,
-    "simulation_seconds": 0.006546260999996889,
+    "circuit_build_seconds": 0.02051952499999743,
+    "transpile_seconds": 0.051048396999995305,
+    "simulation_transpile_seconds": 0.05061185400000312,
+    "simulation_seconds": 0.014190453000004766,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -179,7 +179,7 @@
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
     ],
-    "total_experiment_seconds": 0.15782404800000194
+    "total_experiment_seconds": 0.17680692700000122
   },
   {
     "name": "C16_F11",
@@ -300,10 +300,10 @@
       "cx": 21540,
       "measure": 8
     },
-    "circuit_build_seconds": 0.10152327599999467,
-    "transpile_seconds": 0.26045557900000205,
-    "simulation_transpile_seconds": 0.0626225809999994,
-    "simulation_seconds": 0.021669504999998424,
+    "circuit_build_seconds": 0.09971157300000044,
+    "transpile_seconds": 0.2520818149999968,
+    "simulation_transpile_seconds": 0.06252285899999777,
+    "simulation_seconds": 0.021625119999995945,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -320,7 +320,7 @@
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
     ],
-    "total_experiment_seconds": 0.7319552159999958
+    "total_experiment_seconds": 0.7215184280000031
   },
   {
     "name": "C32_F23",
@@ -521,10 +521,10 @@
       "cx": 138292,
       "measure": 10
     },
-    "circuit_build_seconds": 0.5098480589999994,
-    "transpile_seconds": 1.674174119,
-    "simulation_transpile_seconds": 0.12849101400000507,
-    "simulation_seconds": 0.16476076600000056,
+    "circuit_build_seconds": 0.5049842390000023,
+    "transpile_seconds": 1.6678623290000019,
+    "simulation_transpile_seconds": 0.12703636800000595,
+    "simulation_seconds": 0.16313230699999792,
     "backend": "AerSimulator ideal",
     "qiskit_version": "1.4.6",
     "qiskit_aer_version": "0.17.2",
@@ -541,6 +541,6 @@
       "AerSimulator ideal: sem ruído físico ou execução em QPU.",
       "Não quebra Curve25519 nem chaves X25519 reais."
     ],
-    "total_experiment_seconds": 4.289112107999998
+    "total_experiment_seconds": 4.281167911000004
   }
 ]
