@@ -164,10 +164,6 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         counts, n, metadata["secret_d"], metadata["order"]
     )
     ops = compiled.count_ops()
-    two_qubit = sum(int(value) for name, value in ops.items()
-                    if compiled.find_bit(compiled.data[0].operation.qubits[0]).index >= 0
-                    and next((inst.operation.num_qubits == 2 for inst in compiled.data
-                              if inst.operation.name == name), False)) if compiled.data else 0
     # Conta operações de dois qubits diretamente, sem inferir pela família do gate.
     two_qubit = sum(1 for inst in compiled.data if inst.operation.num_qubits == 2)
     metadata.update({
