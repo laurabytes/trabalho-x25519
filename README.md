@@ -21,7 +21,7 @@ o benchmark pqc requer openssl 3.5+ com suporte a ml-kem-768.
 
 - `src/`: experimentos e benchmarks.
 - `data/`: resultados gerados.
-- `figures/`: gráfico de comunicação.
+- `figures/`: gráficos de qubits e comunicação.
 - `relatorio_tecnico.md`: análise e limitações.
 
 ## limite
