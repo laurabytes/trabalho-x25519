@@ -84,6 +84,38 @@ if results_path.exists():
     plt.savefig(figures_dir / "ecdlog_qubits.svg", format="svg", bbox_inches="tight")
     plt.close()
 
+
+qiskit_results_path = data_dir / "ecdlog_qiskit_results.json"
+if qiskit_results_path.exists():
+    qresults = json.loads(qiskit_results_path.read_text())
+    metrics_path = data_dir / "ecdlog_qiskit_metrics.csv"
+    metric_fields = [
+        "name", "order", "secret_d", "recovered_d", "success", "shots",
+        "logical_qubits", "transpiled_depth", "transpiled_total_operations",
+        "transpiled_two_qubit_operations", "transpile_seconds", "simulation_seconds",
+        "informative_fraction", "period_relation_fraction",
+    ]
+    with metrics_path.open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=metric_fields)
+        writer.writeheader()
+        for item in qresults:
+            writer.writerow({key: item.get(key) for key in metric_fields})
+
+    case_labels = [item["name"] for item in qresults]
+    for field, ylabel, title, filename in [
+        ("transpiled_depth", "Profundidade", "Profundidade do circuito ECDLP transpilado", "ecdlog_qiskit_depth.svg"),
+        ("transpiled_total_operations", "Operações", "Operações totais do circuito ECDLP", "ecdlog_qiskit_operations.svg"),
+        ("transpiled_two_qubit_operations", "Portas de dois qubits", "Operações de dois qubits do circuito ECDLP", "ecdlog_qiskit_2q.svg"),
+    ]:
+        plt.figure(figsize=(8, 5))
+        plt.bar(case_labels, [item[field] for item in qresults])
+        plt.xlabel("Instância ECDLP")
+        plt.ylabel(ylabel)
+        plt.title(title)
+        plt.tight_layout()
+        plt.savefig(figures_dir / filename, format="svg", bbox_inches="tight")
+        plt.close()
+
 print(f"X25519: {x25519_bytes:,} bytes")
 print(f"ML-KEM-768: {ml_kem_bytes:,} bytes")
 print(f"Adicional: {ml_kem_bytes - x25519_bytes:,} bytes")
