@@ -65,7 +65,7 @@ def point_order(P, a, p):
 
 def qft_matrix(size):
     values = np.arange(size)
-    return np.exp(2j * np.pi * np.outer(values, values) / size) / np.sqrt(size)
+    return np.exp(-2j * np.pi * np.outer(values, values) / size) / np.sqrt(size)
 
 
 def run_case(case, secret, shots, seed):
