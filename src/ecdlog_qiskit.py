@@ -108,9 +108,19 @@ def build_ecdlog_circuit(case, secret):
             if label == 0:
                 continue
             control_state = ui | (vi << n)
+            # Ativa exatamente o padrão |u>|v> com X nos controles que
+            # devem estar em zero; evita ambiguidades de endianness de ctrl_state.
+            zero_controls = [
+                controls[index] for index in range(2 * n)
+                if ((control_state >> index) & 1) == 0
+            ]
+            for qubit in zero_controls:
+                qc.x(qubit)
             for bit in range(n):
                 if (label >> bit) & 1:
-                    qc.mcx(controls, point[bit], ctrl_state=control_state)
+                    qc.mcx(controls, point[bit])
+            for qubit in reversed(zero_controls):
+                qc.x(qubit)
 
     inverse_qft(qc, u)
     inverse_qft(qc, v)
