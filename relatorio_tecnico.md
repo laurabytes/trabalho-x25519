@@ -54,15 +54,15 @@ os tamanhos abaixo são os comprimentos normativos dos elementos criptográficos
 
 ## 5. processamento
 
-benchmark de 30 repetições em linux x86-64, python 3.13.5 e openssl 3.5.5:
+benchmark reproduzido em 30 repetições no ambiente linux x86-64, python 3.13.5 e openssl 3.5.5:
 
 | operação | mediana |
 |---|---:|
-| x25519: gerar dois pares de chaves | 0,062113 ms |
-| x25519: duas derivações | 0,064371 ms |
-| ml-kem-768: keygen + exportação | 10,117555 ms |
-| ml-kem-768: encaps | 4,851460 ms |
-| ml-kem-768: decaps | 4,571113 ms |
+| x25519: gerar dois pares de chaves | 0,061657 ms |
+| x25519: duas derivações | 0,063695 ms |
+| ml-kem-768: keygen + exportação | 9,770485 ms |
+| ml-kem-768: encaps | 4,648956 ms |
+| ml-kem-768: decaps | 4,356603 ms |
 
 os 30 testes de ml-kem-768 confirmaram igualdade entre os segredos encapsulado e desencapsulado. atenção: x25519 foi medido pela biblioteca python `cryptography`, enquanto ml-kem foi medido pela cli do openssl. os tempos incluem overheads diferentes e não permitem comparar diretamente a velocidade intrínseca das primitivas. cpu, memória e energia não foram medidos.
 
