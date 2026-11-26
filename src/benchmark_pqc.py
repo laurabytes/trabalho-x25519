@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Benchmark X25519 and ML-KEM-768 using local cryptographic implementations."""
+"""benchmark de x25519 e ml-kem-768 usando implementações criptográficas locais."""
 import argparse
 import json
 import platform
