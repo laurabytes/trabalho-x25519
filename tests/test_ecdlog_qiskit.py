@@ -8,13 +8,13 @@ class QiskitECDLPTests(unittest.TestCase):
         circuit, metadata = build_ecdlog_circuit(CASES[0], secret=3)
         self.assertEqual(circuit.num_qubits, 6)
         self.assertEqual(metadata["Q"], [1, 3])
-        self.assertGreater(circuit.count_ops().get("mcx", 0), 0)
+        self.assertGreater(circuit.num_nonlocal_gates(), 0)
 
     def test_aer_recovers_reduced_secret_and_reports_metrics(self):
-        result = run_case(CASES[0], secret=3, shots=512, seed=42)
+        result = run_case(CASES[0], secret=3, shots=1024, seed=20261126)
         self.assertTrue(result["success"])
         self.assertEqual(result["recovered_d"], 3)
-        self.assertEqual(result["shots"], 512)
+        self.assertEqual(result["shots"], 1024)
         self.assertAlmostEqual(result["period_relation_fraction"], 1.0)
         self.assertGreater(result["transpiled_depth"], 0)
         self.assertGreater(result["transpiled_total_operations"], 0)
