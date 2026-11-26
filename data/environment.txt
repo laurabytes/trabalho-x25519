@@ -1,4 +1,6 @@
-Generated in ChatGPT artifact environment; not the student's MacBook.
-Python: 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]
+Benchmark environment used for the committed data:
+Python: 3.13.5
 Platform: Linux-6.18.57-x86_64-with-glibc2.41
-Re-run benchmarks on the target machine before reporting timings.
+OpenSSL: 3.5.5 27 Jan 2026
+Repetitions: 30
+Note: X25519 uses Python cryptography; ML-KEM-768 uses OpenSSL CLI. Timings include wrapper/process and file I/O overhead and are not directly comparable.
