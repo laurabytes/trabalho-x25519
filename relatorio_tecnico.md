@@ -80,9 +80,9 @@ Os formatos internos de chave privada e o armazenamento em aplicações podem ac
 
 Considerando, de forma simplificada, uma mensagem de 32 bytes por sessão para X25519 e um ciphertext de 1.088 bytes por sessão para ML-KEM-768:
 
-- 1.000.000 × 32 B = 32.000.000 bytes (32 MB);
-- 1.000.000 × 1.088 B = 1.088.000.000 bytes (1,088 GB);
-- diferença = 1.056.000.000 bytes (1,056 GB).
+- 1.000.000 × 64 B = 64.000.000 bytes (64 MB), considerando duas shares públicas X25519;
+- 1.000.000 × 1.088 B + 1.184 B de chave pública provisionada = 1.088.001.184 bytes;
+- diferença = 1.024.001.184 bytes (aproximadamente 1,024 GB).
 
 Esse cenário compara apenas os elementos indicados e não inclui cabeçalhos, certificados, retransmissões ou outras mensagens do protocolo. O custo exato depende do protocolo e do modo de integração.
 
@@ -90,11 +90,11 @@ Esse cenário compara apenas os elementos indicados e não inclui cabeçalhos, c
 
 ### 7.1 Armazenamento
 
-A chave pública ML-KEM-768 é 37 vezes maior que a chave pública X25519 (1.184 B contra 32 B). A chave privada bruta indicada é 75 vezes maior (2.400 B contra 32 B). Em dispositivos IoT com flash e RAM limitadas, deve-se avaliar armazenamento persistente, buffers temporários, cópias de chaves e memória de execução.
+A chave pública ML-KEM-768 é 37 vezes maior que a chave pública X25519 (1.184 B contra 32 B). A chave privada bruta indicada é 75 vezes maior (2.400 B contra 32 B). No cenário de troca, são comparadas duas shares públicas X25519 (64 B) com um ciphertext ML-KEM-768 (1.088 B). Em dispositivos IoT com flash e RAM limitadas, deve-se avaliar armazenamento persistente, buffers temporários, cópias de chaves e memória de execução.
 
 ### 7.2 Comunicação
 
-O ciphertext ML-KEM-768 possui 1.088 bytes. No cenário de um milhão de sessões, a diferença simplificada é de aproximadamente 1,056 GB. Em redes de baixa largura de banda, enlaces intermitentes ou dispositivos com franquia de transmissão limitada, o aumento pode afetar latência, energia de rádio e custo de comunicação.
+O ciphertext ML-KEM-768 possui 1.088 bytes. No cenário de um milhão de sessões, o volume é 64 MB para X25519 e 1.088.001.184 bytes para ML-KEM-768 com uma chave pública provisionada uma vez. Em redes de baixa largura de banda, enlaces intermitentes ou dispositivos com franquia de transmissão limitada, o aumento pode afetar latência, energia de rádio e custo de comunicação.
 
 ### 7.3 Processamento
 
