@@ -49,7 +49,7 @@
         "count": 987
       }
     ],
-    "simulation_seconds": 0.014786692000001267,
+    "simulation_seconds": 0.04989784800000052,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
@@ -129,7 +129,7 @@
         "count": 527
       }
     ],
-    "simulation_seconds": 0.0007548210000010158,
+    "simulation_seconds": 0.00044960399998217326,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
@@ -249,7 +249,7 @@
         "count": 233
       }
     ],
-    "simulation_seconds": 0.0018485769999969648,
+    "simulation_seconds": 0.0010873990000277445,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
@@ -283,8 +283,8 @@
     "logical_qubits": 15,
     "shots": 4096,
     "seed": 20261113,
-    "informative_shots": 2024,
-    "informative_fraction": 0.494140625,
+    "informative_shots": 1983,
+    "informative_fraction": 0.484130859375,
     "theoretical_informative_fraction": 0.5,
     "period_relation_fraction": 1.0,
     "measurement_counts": [
@@ -371,42 +371,42 @@
       {
         "ku": 16,
         "kv": 16,
-        "count": 121
+        "count": 139
       },
       {
         "ku": 17,
         "kv": 19,
-        "count": 132
+        "count": 140
       },
       {
         "ku": 18,
         "kv": 22,
-        "count": 120
+        "count": 150
       },
       {
         "ku": 19,
         "kv": 25,
-        "count": 123
+        "count": 140
       },
       {
         "ku": 20,
         "kv": 28,
-        "count": 133
+        "count": 106
       },
       {
         "ku": 21,
         "kv": 31,
-        "count": 145
+        "count": 112
       },
       {
         "ku": 22,
         "kv": 2,
-        "count": 115
+        "count": 139
       },
       {
         "ku": 23,
         "kv": 5,
-        "count": 146
+        "count": 108
       },
       {
         "ku": 24,
@@ -441,15 +441,15 @@
       {
         "ku": 30,
         "kv": 26,
-        "count": 137
+        "count": 133
       },
       {
         "ku": 31,
         "kv": 29,
-        "count": 133
+        "count": 138
       }
     ],
-    "simulation_seconds": 0.0082937350000023,
+    "simulation_seconds": 0.0038358950000088043,
     "method": "ideal_numpy_statevector_and_exact_qft",
     "limitations": [
       "Não é circuito nativo transpilado em Qiskit/Aer.",
