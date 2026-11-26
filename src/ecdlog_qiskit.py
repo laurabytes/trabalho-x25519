@@ -9,7 +9,7 @@ from pathlib import Path
 
 import qiskit
 import qiskit_aer
-from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
+from qiskit import AncillaRegister, ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
 from qiskit.circuit.library import QFTGate
 from qiskit_aer import AerSimulator
 
@@ -83,8 +83,9 @@ def build_ecdlog_circuit(case, secret):
     u = QuantumRegister(n, "u")
     v = QuantumRegister(n, "v")
     point = QuantumRegister(n, "point")
+    ancillas = AncillaRegister(2 * n - 2, "anc")
     measured = ClassicalRegister(2 * n, "m")
-    qc = QuantumCircuit(u, v, point, measured, name=f"ecdlog_{case['name']}")
+    qc = QuantumCircuit(u, v, point, ancillas, measured, name=f"ecdlog_{case['name']}")
     qc.h(u)
     qc.h(v)
 
@@ -112,7 +113,7 @@ def build_ecdlog_circuit(case, secret):
                 qc.x(qubit)
             for bit in range(n):
                 if (label >> bit) & 1:
-                    qc.mcx(controls, point[bit])
+                    qc.mcx(controls, point[bit], ancilla_qubits=list(ancillas), mode='v-chain')
             for qubit in reversed(zero_controls):
                 qc.x(qubit)
 
@@ -154,7 +155,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
     backend = AerSimulator()
     start = time.perf_counter()
     compiled = transpile(
-        circuit, backend=backend, optimization_level=optimization_level,
+        circuit, basis_gates=["u", "cx"], optimization_level=optimization_level,
         seed_transpiler=seed,
     )
     transpile_seconds = time.perf_counter() - start
@@ -167,7 +168,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         counts, n, metadata["secret_d"], metadata["order"]
     )
     ops = compiled.count_ops()
-    two_qubit = sum(1 for inst in compiled.data if inst.operation.num_qubits == 2)
+    two_qubit = int(ops.get("cx", 0))
     metadata.update({
         "shots": shots, "seed": seed, "recovered_d": recovered,
         "success": recovered == metadata["secret_d"],
@@ -179,6 +180,7 @@ def run_case(case, secret, shots, seed, optimization_level=1):
         "transpiled_qubits": compiled.num_qubits,
         "transpiled_total_operations": compiled.size(),
         "transpiled_two_qubit_operations": two_qubit,
+        "native_basis": ["u", "cx"],
         "transpiled_operation_counts": {str(k): int(v) for k, v in ops.items()},
         "transpile_seconds": transpile_seconds,
         "simulation_seconds": simulation_seconds,
