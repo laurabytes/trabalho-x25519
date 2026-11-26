@@ -138,7 +138,7 @@ def build_ecdlog_circuit(case, secret, use_ancillas=False):
 
 
 def decode_counts(counts, n, secret, order):
-    samples, informative, candidates, relation, correct_candidates = [], 0, {}, 0
+    samples, informative, candidates, relation, correct_candidates = [], 0, {}, 0, 0
     for bitstring, count in counts.items():
         # Uma única ClassicalRegister: Qiskit imprime m[2n-1] ... m[0].
         bits = bitstring.replace(" ", "")
