@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gera tabelas e gráficos de tamanhos, comunicação e recursos ECDLP."""
+"""gera tabelas e gráficos de tamanhos, comunicação e recursos ecdlp."""
 import csv
 import json
 from pathlib import Path
