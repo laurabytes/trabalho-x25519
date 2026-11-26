@@ -91,8 +91,8 @@ if qiskit_results_path.exists():
     metrics_path = data_dir / "ecdlog_qiskit_metrics.csv"
     metric_fields = [
         "name", "order", "secret_d", "recovered_d", "success", "shots",
-        "logical_qubits", "transpiled_depth", "transpiled_total_operations",
-        "transpiled_two_qubit_operations", "transpile_seconds", "simulation_seconds",
+        "logical_qubits", "transpiled_qubits", "transpiled_depth", "transpiled_total_operations",
+        "transpiled_two_qubit_operations", "transpile_seconds", "simulation_transpile_seconds", "simulation_seconds",
         "informative_fraction", "period_relation_fraction",
     ]
     with metrics_path.open("w", newline="") as stream:
