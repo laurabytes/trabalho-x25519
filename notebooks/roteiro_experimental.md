@@ -4,7 +4,7 @@
 
 - python 3.10 ou superior;
 - dependências de `requirements.txt`;
-- openssl 3.5 ou superior com ML-KEM-768 para o benchmark completo.
+- openssl 3.5 ou superior com ml-kem-768 para o benchmark completo.
 
 ## execução
 
@@ -29,6 +29,6 @@ python -m unittest discover -s tests -v
 
 ## limitações
 
-o circuito usa um oráculo reversível construído por tabela clássica. a simulação no Aer é ideal, sem ruído e sem execução em QPU. não representa um ataque a Curve25519 real.
+o circuito usa um oráculo reversível construído por tabela clássica. a simulação no aer é ideal, sem ruído e sem execução em qpu. não representa um ataque a curve25519 real.
 
-os tempos de x25519 e ML-KEM-768 incluem overheads de interfaces diferentes. cpu e memória são registrados de forma agregada; energia não foi medida.
+os tempos de x25519 e ml-kem-768 incluem overheads de interfaces diferentes. cpu e memória são registrados de forma agregada; energia não foi medida.
