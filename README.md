@@ -1,12 +1,12 @@
 # x25519 e migração pós-quântica
 
-estudo de ECDLP em curvas pequenas e comparação entre x25519 e ML-KEM-768.
+este projeto testa o ecdlp em curvas pequenas e compara x25519 com ml-kem-768.
 
 ## requisitos
 
 - python 3.10 ou superior;
 - dependências de `requirements.txt`;
-- openssl 3.5 ou superior com ML-KEM-768 habilitado.
+- openssl 3.5 ou superior com ml-kem-768 habilitado.
 
 ## instalação
 
@@ -41,6 +41,6 @@ python -m unittest discover -s tests -v
 
 ## observações
 
-o circuito Qiskit/Aer estuda quatro instâncias pequenas de ECDLP. o oráculo reversível usa uma tabela clássica e não implementa aritmética de curva escalável. a simulação é ideal e não usa uma QPU.
+o circuito no qiskit/aer testa quatro casos pequenos de ecdlp. o oráculo reversível usa uma tabela clássica e não implementa aritmética de curva escalável. a simulação é ideal e não usa uma qpu.
 
-o experimento não quebra Curve25519 nem chaves x25519 reais. os tempos de x25519 e ML-KEM-768 vêm de interfaces diferentes e incluem overheads distintos. consulte os dados e o relatório antes de comparar os resultados.
+o experimento não quebra curve25519 nem chaves x25519 reais. os tempos de x25519 e ml-kem-768 vêm de interfaces diferentes e incluem overheads distintos. os resultados completos estão na pasta `data/` e no relatório.
