@@ -10,9 +10,6 @@ class PQCBenchmarkTests(unittest.TestCase):
         self.assertTrue(result["available"])
         self.assertEqual(result["public_key_bytes"], 32)
         self.assertEqual(result["shared_secret_bytes"], 32)
-        self.assertEqual(len(result["raw_measurements_ms"]["keygen"]), 1)
-        self.assertEqual(len(result["raw_measurements_ms"]["encaps"]), 1)
-        self.assertEqual(len(result["raw_measurements_ms"]["decaps"]), 1)
         self.assertEqual(len(result["raw_measurements_ms"]["keygen_pair"]), 2)
         self.assertEqual(len(result["raw_measurements_ms"]["two_exchanges"]), 2)
 
@@ -30,6 +27,9 @@ class PQCBenchmarkTests(unittest.TestCase):
         self.assertTrue(result["secret_match"])
         self.assertEqual(result["ciphertext_bytes"], 1088)
         self.assertEqual(result["shared_secret_bytes"], 32)
+        self.assertEqual(len(result["raw_measurements_ms"]["keygen"]), 1)
+        self.assertEqual(len(result["raw_measurements_ms"]["encaps"]), 1)
+        self.assertEqual(len(result["raw_measurements_ms"]["decaps"]), 1)
 
 
 if __name__ == "__main__":
