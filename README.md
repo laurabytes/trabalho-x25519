@@ -30,13 +30,13 @@ python src/validate_artifacts.py
 python -m unittest discover -s tests -v
 ```
 
-O primeiro comando constrói, transpila e executa o circuito ECDLP em Qiskit/Aer, registrando distribuição de medições, profundidade, operações totais, portas de dois qubits e tempos. O segundo é uma simulação NumPy de referência para comparação matemática. Os comandos seguintes executam o benchmark PQC, atualizam tabelas/gráficos e validam os dados. O workflow reproduz também o circuito Qiskit/Aer e executa os testes.
+O primeiro comando constrói, transpila e executa o circuito ECDLP em Qiskit/Aer, registrando distribuição de medições, profundidade, operações totais, portas de dois qubits e tempos. O segundo é uma simulação NumPy de referência para comparação matemática. Os comandos seguintes executam o benchmark PQC, atualizam tabelas, cenários de armazenamento/comunicação e gráficos de qubits, profundidade, gates e tempo; por fim validam os dados brutos. O workflow reproduz também o circuito Qiskit/Aer e executa os testes.
 
 ## Estrutura
 
 - `src/`: circuito ECDLP em Qiskit/Aer, simulação NumPy de referência, benchmark PQC, comparação de tamanhos e validação.
 - `tests/`: testes automatizados.
-- `data/`: dados em JSON e CSV.
+- `data/`: dados em JSON e CSV, incluindo medições, benchmark bruto e cenários de armazenamento/comunicação.
 - `figures/`: gráficos SVG.
 - `notebooks/roteiro_experimental.md`: roteiro de execução.
 - `relatorio_tecnico.md`: análise, resultados e limitações.
