@@ -120,10 +120,10 @@ Certificados digitais e assinaturas não são substituídos por ML-KEM: para ass
 ## 9. Respostas às questões do enunciado
 
 **Q1. Qual foi a maior instância comprometida experimentalmente utilizando Shor?**  
-Nos resultados anteriores disponibilizados, a maior instância confirmada foi a fatoração toy `N=77`, com fatores 7 e 11, mas ela não corresponde ao ECDLP do X25519. Para X25519/ECDLP, o projeto inclui um modelo toy idealizado; não há resultado de circuito Shor completo confirmado. Portanto, não se deve declarar que uma chave X25519 foi comprometida.
+A maior instância reduzida de ECDLP foi C32_F23, com curva `y²=x³+x+10 mod 23`, ponto `P=(5,5)`, `Q=(8,22)`, ordem 32, segredo de teste `d=3`, 15 qubits lógicos e 4.096 shots. A simulação ideal recupera `d=3`. Isso não é uma chave Curve25519 real nem uma execução em hardware.
 
 **Q2. Qual foi o principal fator limitante?**  
-Na fatoração anterior, a baixa quantidade de shots prejudicou a recuperação do período. Em circuitos quânticos maiores, profundidade, número de qubits, decomposição de portas, conectividade, ruído e custo de simulação também limitam a execução. Para o ECDLP em circuito, as métricas precisam ser medidas após a implementação e transpilation.
+O simulador de estado vetorial cresce exponencialmente com o número de qubits. Além disso, o oráculo por tabela de pontos não é uma implementação escalável da aritmética reversível de Curve25519. A simulação não inclui decomposição nativa, conectividade ou ruído.
 
 **Q3. Por que X25519 é vulnerável mesmo sem quebra da chave real?**  
 Porque sua segurança depende do ECDLP, que Shor resolve eficientemente em um computador quântico tolerante a falhas e suficientemente grande. A ausência de quebra experimental hoje decorre das limitações de escala e confiabilidade do hardware, não de resistência matemática ao algoritmo.
