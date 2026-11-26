@@ -1,0 +1,39 @@
+name: reproducibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: reproduce reduced ECDLP experiment
+        run: python src/ecdlog_shor.py --shots 4096 --secret 3 --seed 20261110
+      - name: reproduce PQC benchmark
+        run: python src/benchmark_pqc.py --repetitions 30
+      - name: generate tables and figures
+        run: python src/benchmark_sizes.py
+      - name: validate raw data
+        run: python src/validate_artifacts.py
+      - name: run tests
+        run: python -m unittest discover -s tests -v
+      - name: upload generated evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: experiment-data-and-figures
+          path: |
+            data/
+            figures/
