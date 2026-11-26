@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Simulação ideal de ECDLP reduzido pela estrutura de subgrupo oculto de Shor.
+"""simulação ideal de ecdlp reduzido pela estrutura de subgrupo oculto de shor.
 
-O estado é calculado exatamente em NumPy. Não é um circuito compilado em
-portas nativas, não usa Aer/FakeProvider e não representa Curve25519 real.
+o estado é calculado exatamente em numpy. não é um circuito compilado em
+portas nativas, não usa aer/fakeprovider e não representa curve25519 real.
 """
 import argparse
 import csv
