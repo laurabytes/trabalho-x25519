@@ -51,6 +51,10 @@ def benchmark_x25519(repetitions):
         "shared_secret_bytes": len(secret_a),
         "keygen_pair_ms_median": median_ms(keygen_times),
         "two_exchanges_ms_median": median_ms(exchange_times),
+        "raw_measurements_ms": {
+            "keygen_pair": [round(value, 6) for value in keygen_times],
+            "two_exchanges": [round(value, 6) for value in exchange_times],
+        },
     }
 
 
@@ -100,6 +104,11 @@ def benchmark_ml_kem(repetitions, openssl):
         "decaps_ms_median": median_ms(decaps_times),
         "secret_match": True,
         "note": "KeyGen inclui geração e exportação da chave pública; tempos incluem overhead do processo CLI.",
+        "raw_measurements_ms": {
+            "keygen": [round(value, 6) for value in keygen_times],
+            "encaps": [round(value, 6) for value in encaps_times],
+            "decaps": [round(value, 6) for value in decaps_times],
+        },
     }
 
 
