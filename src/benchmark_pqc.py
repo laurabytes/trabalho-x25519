@@ -159,6 +159,38 @@ def main():
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
+    try:
+        import qiskit
+        import qiskit_aer
+        qiskit_versions = f"Qiskit: {qiskit.__version__}\\nQiskit Aer: {qiskit_aer.__version__}"
+    except Exception:
+        qiskit_versions = "Qiskit: indisponível"
+    x = result.get("x25519", {})
+    ml = result.get("ml_kem_768", {})
+    resource_data = result.get("resource_usage", {})
+    environment_lines = [
+        "Ambiente de benchmark reproduzido automaticamente",
+        f"Python: {result['python']}",
+        f"Plataforma: {result['platform']}",
+        f"OpenSSL: {result['openssl']}",
+        qiskit_versions,
+        f"Repetições: {args.repetitions}",
+        f"X25519 KeyGen par (mediana ms): {x.get('keygen_pair_ms_median')}",
+        f"X25519 duas operações exchange (mediana ms): {x.get('two_exchanges_ms_median')}",
+        f"ML-KEM-768 KeyGen + exportação (mediana ms): {ml.get('keygen_ms_median')}",
+        f"ML-KEM-768 Encaps (mediana ms): {ml.get('encaps_ms_median')}",
+        f"ML-KEM-768 Decaps (mediana ms): {ml.get('decaps_ms_median')}",
+        f"CPU user do processo (s): {resource_data.get('process_cpu_user_seconds')}",
+        f"CPU system do processo (s): {resource_data.get('process_cpu_system_seconds')}",
+        f"Pico RSS do processo: {resource_data.get('process_peak_rss')} {resource_data.get('rss_unit')}",
+        f"CPU user dos subprocessos (s): {resource_data.get('children_cpu_user_seconds')}",
+        f"CPU system dos subprocessos (s): {resource_data.get('children_cpu_system_seconds')}",
+        f"Pico RSS dos subprocessos: {resource_data.get('children_peak_rss')} {resource_data.get('rss_unit')}",
+        "Segredos compartilhados coincidiram nas execuções disponíveis.",
+        "Tempos incluem overhead de interfaces diferentes e não são comparação intrínseca das primitivas.",
+        "RSS é pico agregado, não medição por operação; energia não foi medida.",
+    ]
+    Path("data/environment.txt").write_text("\\n".join(environment_lines) + "\\n")
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 
